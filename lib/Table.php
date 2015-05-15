@@ -12,6 +12,7 @@
 namespace DTL\DataTable;
 
 use DTL\DataTable\Column;
+use DTL\DataTable\Builder\TableBuilder;
 
 class Table extends Aggregated
 {
@@ -20,6 +21,11 @@ class Table extends Aggregated
     public function __construct(array $rows = array())
     {
         $this->rows = $rows;
+    }
+
+    public static function createBuilder()
+    {
+        return new TableBuilder();
     }
 
     public function getRows()

@@ -19,10 +19,27 @@ Col 1 | Col 2 | Col 3
 12    | 14    | 4
 12    | 14    | 4
 
- Would be created as follows:
+Would be created as follows:
 
- ````php
- $table = new Table(
+````php
+$table = Table::createBuilder()
+    ->row()
+        ->cell(12)
+        ->cell(14)
+        ->cell(4)
+    ->end()
+    ->row()
+        ->cell(12)
+        ->cell(14)
+        ->cell(4)
+    ->end()
+    ->getTable();
+````
+
+Or without the builder:
+
+````php
+$table = new Table(
      new Row(array(
          new Cell(12),
          new Cell(14),

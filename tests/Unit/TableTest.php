@@ -59,6 +59,37 @@ class TableTest extends AggregateableCase
                 'goodbye'
             )
         );
+
         $this->assertEquals($expected, $table->toArray());
+    }
+
+    /**
+     * It should provide a table builder
+     */
+    public function testTableBuilder()
+    {
+        $table = Table::createBuilder()
+            ->row()
+                ->cell('hello', ['group1'])
+                ->cell('goodbye', ['group2'])
+            ->end()
+            ->row()
+                ->cell('bonjour', ['group1'])
+                ->cell('aurevoir', ['group2'])
+            ->end()
+            ->getTable();
+
+        $expectedTable = new Table(array(
+            new Row(array(
+                new Cell('hello', ['group1']),
+                new Cell('goodbye', ['group2']),
+            )),
+            new Row(array(
+                new Cell('bonjour', ['group1']),
+                new Cell('aurevoir', ['group2']),
+            )),
+        ));
+
+        $this->assertEquals($expectedTable, $table);
     }
 }
