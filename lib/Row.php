@@ -18,6 +18,9 @@ class Row extends Aggregated
      */
     protected $cells;
 
+    /**
+     * @param array $cells
+     */
     public function __construct(array $cells = array())
     {
         $this->cells = $cells;
@@ -45,6 +48,13 @@ class Row extends Aggregated
         });
     }
 
+    /**
+     * Return the cell with the given index
+     *
+     * @param int $index
+     * @throws \OutOfBoundsException
+     * @return Cell
+     */
     public function getCell($index)
     {
         if (!array_key_exists($index, $this->cells)) {
@@ -57,6 +67,9 @@ class Row extends Aggregated
         return $this->cells[$index];
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function values(array $groups = array())
     {
         $values = array();
@@ -69,6 +82,12 @@ class Row extends Aggregated
         return $values;
     }
 
+    /**
+     * Return an array representation of this row
+     *
+     * @param array $groups
+     * @return array
+     */
     public function toArray(array $groups = array())
     {
         $result = array();

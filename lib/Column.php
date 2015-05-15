@@ -13,9 +13,20 @@ namespace DTL\DataTable;
 
 class Column extends Aggregated
 {
+    /**
+     * @var Table
+     */
     private $table;
+
+    /**
+     * @var int
+     */
     private $index;
 
+    /**
+     * @param Table $table
+     * @param mixed $index
+     */
     public function __construct(Table $table, $index)
     {
         $this->table = $table;

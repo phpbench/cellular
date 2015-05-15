@@ -92,4 +92,34 @@ class TableTest extends AggregateableCase
 
         $this->assertEquals($expectedTable, $table);
     }
+
+    /**
+     * It should produce a new aggregated table based on unique column values
+     */
+    public function testAggregate()
+    {
+        $table = Table::createBuilder()
+            ->row()
+                ->cell('hello')
+                ->cell(12)
+                ->cell('goodbye')
+            ->end()
+            ->row()
+                ->cell('hello')
+                ->cell(12)
+                ->cell('goodbye')
+            ->end()
+            ->row()
+                ->cell('goodbye')
+                ->cell(12)
+                ->cell('bar')
+            ->end()
+            ->getTable();
+
+        $newTable = $table->aggregate(array(0));
+        $this->assertNotSame($table, $newTable);
+        $this->assertCount(2, $newTable->getRows());
+        $this->assertEquals(24, $newTable->getRow(0)->getCell(1)->value());
+        $this->assertEquals(12, $newTable->getRow(1)->getCell(1)->value());
+    }
 }

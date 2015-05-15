@@ -38,6 +38,12 @@ class Cell implements AggregateableInterface
         return in_array($group, $this->groups);
     }
 
+    /**
+     * Return true if this cell is in one of the given groups
+     *
+     * @param array $groups
+     * @return boolean
+     */
     public function inGroups(array $groups)
     {
         foreach ($groups as $group) {

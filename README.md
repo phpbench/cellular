@@ -10,6 +10,9 @@ Features:
 - Supports aggregate `sum`, `avg`, `min`, `max` and `median`.
 - Aggreate on `Table`, `Row` or `Column`.
 - Supports cell groups.
+- Fluent buildern
+
+Note that this library has no release and should not be considered stable.
 
 Creating
 --------
@@ -53,8 +56,8 @@ $table = new Table(
  );
 ````
 
-Aggregating
------------
+Resolving aggregate values
+--------------------------
 
 All elements implement an aggregateable interface, allowing the following:
 
@@ -70,8 +73,8 @@ foreach ($table as $row) {
 echo $table->getColumn(0)->sum(); // sum of column
 ````
 
-Grouping
---------
+Assigning groups and accessing group data
+-----------------------------------------
 
 Groups can be used to analyze only certain cells:
 
@@ -86,4 +89,33 @@ Groups can be used to analyze only certain cells:
 
  echo $table->sum(['group1']); // 26
  echo $table->sum(['group2']); // 4
+````
+
+Aggregating/grouping table data
+-------------------------------
+
+You can aggregate the values in a table based on one or more unique cell
+values in a given column.
+
+````php
+$table = new Table(
+    new Row(array(
+        new Cell('beer'),
+        new Cell(14),
+        new Cell(4),
+    )),
+    new Row(array(
+        new Cell('beer'),
+        new Cell(14),
+        new Cell(4),
+    )),
+    new Row(array(
+        new Cell('snitzel'),
+        new Cell(14),
+        new Cell(4),
+    )),
+);
+
+$newInstance = $table->aggregate([0]); // aggregate on the zeroeth column
+$newInstance->getRow(0)->getCell(1); // 28 -- the values have been aggregated
 ````
