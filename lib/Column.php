@@ -39,4 +39,12 @@ class Column extends Aggregated
 
         return $values;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function toArray(array $groups = array())
+    {
+        return $this->values($groups);
+    }
 }

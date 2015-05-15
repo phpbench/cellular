@@ -57,16 +57,6 @@ class Row extends Aggregated
         return $this->cells[$index];
     }
 
-    public function addCell(Cell $cell)
-    {
-        $this->cells[] = $cell;
-    }
-
-    public function createCell($value, array $groups = array())
-    {
-        return new Cell($value, $groups);
-    }
-
     public function values(array $groups = array())
     {
         $values = array();
@@ -77,5 +67,15 @@ class Row extends Aggregated
         }
 
         return $values;
+    }
+
+    public function toArray(array $groups = array())
+    {
+        $result = array();
+        foreach ($this->values($groups) as $value) {
+            $result[] = $value;
+        }
+
+        return $result;
     }
 }

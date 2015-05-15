@@ -12,6 +12,8 @@
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Table;
+use DTL\DataTable\Row;
+use DTL\DataTable\Cell;
 
 class TableTest extends AggregateableCase
 {
@@ -29,5 +31,34 @@ class TableTest extends AggregateableCase
     {
         $column = $this->getAggregate()->getColumn(1);
         $this->assertEquals(1, $column->sum());
+    }
+
+    /**
+     * It should return an array representation
+     */
+    public function testToArray()
+    {
+        $table = new Table(array(
+            new Row(array(
+                new Cell(4),
+                new Cell(2),
+            )),
+            new Row(array(
+                new Cell('hello'),
+                new Cell('goodbye'),
+            )),
+        ));
+                
+        $expected = array(
+            array(
+                4, 
+                2
+            ),
+            array(
+                'hello',
+                'goodbye'
+            )
+        );
+        $this->assertEquals($expected, $table->toArray());
     }
 }

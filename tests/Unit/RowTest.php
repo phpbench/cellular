@@ -41,4 +41,24 @@ class RowTest extends AggregateableCase
     {
         $this->getAggregate()->getCell(999);
     }
+
+    /**
+     * It should return an array representation
+     */
+    public function testToArray()
+    {
+        $expected = array(
+            'text',
+            1,
+            13,
+            1,
+            5,
+            8,
+            3,
+            5,
+            2,
+        );
+        $array = $this->getAggregate()->toArray();
+        $this->assertEquals($expected, $array);
+    }
 }

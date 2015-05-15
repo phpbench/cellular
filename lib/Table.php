@@ -27,11 +27,6 @@ class Table extends Aggregated
         return $this->rows;
     }
 
-    public function createRow()
-    {
-        return new Row();
-    }
-
     public function getColumn($index)
     {
         return new Column($this, $index);
@@ -47,5 +42,15 @@ class Table extends Aggregated
         }
 
         return $values;
+    }
+
+    public function toArray(array $groups = array())
+    {
+        $result = array();
+        foreach ($this->rows as $row) {
+            $result[] = $row->toArray($groups);
+        }
+
+        return $result;
     }
 }

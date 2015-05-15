@@ -54,4 +54,6 @@ abstract class Aggregated implements AggregateableInterface
     }
 
     abstract public function values(array $groups = array());
+
+    abstract public function toArray(array $groups = array());
 }
