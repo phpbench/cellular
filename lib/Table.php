@@ -11,6 +11,8 @@
 
 namespace DTL\DataTable;
 
+use DTL\DataTable\Column;
+
 class Table extends Aggregated
 {
     private $rows;
@@ -30,9 +32,9 @@ class Table extends Aggregated
         return new Row();
     }
 
-    public function addColumn(Column $column)
+    public function getColumn($index)
     {
-        $this->columns[] = $column;
+        return new Column($this, $index);
     }
 
     public function values(array $groups = array())

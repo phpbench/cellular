@@ -21,4 +21,13 @@ class TableTest extends AggregateableCase
             parent::getRowAggregate(),
         ));
     }
+
+    /**
+     * It should get columns
+     */
+    public function testGetColumn()
+    {
+        $column = $this->getAggregate()->getColumn(1);
+        $this->assertEquals(1, $column->sum());
+    }
 }
