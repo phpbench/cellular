@@ -1,0 +1,23 @@
+{
+    "name": "dantleech/data-table",
+    "description": "Represent and analyze tabular data",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel Leech",
+            "email": "daniel@dantleech.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "DTL\\DataTable\\": "lib/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DTL\\DataTable\\Tests\\": "tests/"
+        }
+    }
+}
