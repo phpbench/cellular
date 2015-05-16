@@ -11,6 +11,11 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Abstract class for Table and Row and Column instances
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 abstract class Aggregated implements AggregateableInterface
 {
     /**
@@ -53,7 +58,40 @@ abstract class Aggregated implements AggregateableInterface
         return AggregateHelper::median($this->values($groups), $ceil);
     }
 
-    abstract public function values(array $groups = array());
+    /**
+     * {@inheritDoc}
+     */
+    public function values(array $groups = array()) 
+    {
+        $values = array();
+        foreach ($this->getCells($groups) as $column => $cell) {
+            $values[$column] = $cell->value();
+        }
+
+        return $values;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function fill($value, array $groups = array())
+    {
+        foreach ($this->getCells($groups) as $cell) {
+            $cell->setValue($value);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function map(\Closure $closure, array $groups = array())
+    {
+        foreach ($this->getCells($groups) as $cell) {
+            $cell->setValue($closure($cell));
+        }
+    }
+
+    abstract public function getCells(array $groups = array());
 
     abstract public function toArray(array $groups = array());
 }

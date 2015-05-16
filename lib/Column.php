@@ -11,6 +11,11 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Represents a table column
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class Column extends Aggregated
 {
     /**
@@ -21,34 +26,49 @@ class Column extends Aggregated
     /**
      * @var int
      */
-    private $index;
+    private $key;
 
     /**
      * @param Table $table
-     * @param mixed $index
+     * @param mixed $key
      */
-    public function __construct(Table $table, $index)
+    public function __construct(Table $table, $key)
     {
         $this->table = $table;
-        $this->index = $index;
+        $this->key = $key;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function values(array $groups = array())
+    public function getCells(array $groups = array())
     {
-        $values = array();
+        $cells = array();
         foreach ($this->table->getRows() as $row) {
-            $cell = $row->getCell($this->index);
+            $cell = $row->getCell($this->key);
             if (!empty($groups) && !$cell->inGroup($groups)) {
                 continue;
             }
 
-            $values[] = $cell->value();
+            $cells[] = $cell;
         }
 
-        return $values;
+        return $cells;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGroups()
+    {
+        $groups = array();
+        foreach ($this->getCells() as $cell) {
+            foreach ($cell->getGroups() as $group) {
+                $groups[$group] = $group;
+            }
+        }
+
+        return array_values($groups);
     }
 
     /**

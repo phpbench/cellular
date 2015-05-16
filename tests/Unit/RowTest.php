@@ -12,6 +12,7 @@
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Cell;
+use DTL\DataTable\Row;
 
 class RowTest extends AggregateableCase
 {
@@ -47,18 +48,29 @@ class RowTest extends AggregateableCase
      */
     public function testToArray()
     {
-        $expected = array(
-            'text',
-            1,
-            13,
-            1,
-            5,
-            8,
-            3,
-            5,
-            2,
-        );
-        $array = $this->getAggregate()->toArray();
-        $this->assertEquals($expected, $array);
+        $row = new Row(array(
+            'hello' => new Cell('goodbye'),
+            2 => new Cell('hello'),
+        ));
+
+        $this->assertEquals(array(
+            'hello' => 'goodbye',
+            2 => 'hello',
+        ), $row->toArray());
+    }
+
+    /**
+     * Its should fill
+     */
+    public function testFill()
+    {
+        $row = new Row(array(
+            'hello' => new Cell('goodbye'),
+            2 => new Cell('hello'),
+        ));
+
+        $row->fill('hai');
+        $this->assertEquals('hai', $row->getCell('hello')->value());
+        $this->assertEquals('hai', $row->getCell(2)->value());
     }
 }

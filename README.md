@@ -10,7 +10,7 @@ Features:
 - Supports aggregate `sum`, `avg`, `min`, `max` and `median`.
 - Aggreate on `Table`, `Row` or `Column`.
 - Supports cell groups.
-- Fluent buildern
+- Fluent builder
 
 Note that this library has no release and should not be considered stable.
 
@@ -27,14 +27,14 @@ Would be created as follows:
 ````php
 $table = Table::createBuilder()
     ->row()
-        ->cell(12)
-        ->cell(14)
-        ->cell(4)
+        ->set('col1', 12)
+        ->set('col2', 14)
+        ->set('col3', 4)
     ->end()
     ->row()
-        ->cell(12)
-        ->cell(14)
-        ->cell(4)
+        ->set('col1', 12)
+        ->set('col2', 14)
+        ->set('col3', 4)
     ->end()
     ->getTable();
 ````
@@ -44,14 +44,14 @@ Or without the builder:
 ````php
 $table = new Table(
      new Row(array(
-         new Cell(12),
-         new Cell(14),
-         new Cell(4),
+         'col1' => new Cell(12),
+         'col2' => new Cell(14),
+         'col3' => new Cell(4),
      )),
      new Row(array(
-         new Cell(12),
-         new Cell(14),
-         new Cell(4),
+         'col1' => new Cell(12),
+         'col2' => new Cell(14),
+         'col3' => new Cell(4),
      )),
  );
 ````
@@ -81,9 +81,9 @@ Groups can be used to analyze only certain cells:
 ````php
  $table = new Table(
      new Row(array(
-         new Cell(12, ['group1']),
-         new Cell(14, ['group1']),
-         new Cell(4, ['group2']),
+         'col1' => new Cell(12, ['group1']),
+         'col2' => new Cell(14, ['group1']),
+         'col3' => new Cell(4, ['group2']),
      )),
  );
 
@@ -91,8 +91,32 @@ Groups can be used to analyze only certain cells:
  echo $table->sum(['group2']); // 4
 ````
 
+Applying a callback to each cell
+--------------------------------
+
+You can apply a callback to each cell on either a `Table` or a `Row`:
+
+````php
+$table = Table::createBuilder()
+    ->row()
+        ->set('col1', 'foobar')
+    ->end()
+    ->getTable();
+
+$table->map(function (Cell $cell) {
+    $cell->setValue($cell->value() + 1);
+});
+````
+
+Other methods
+-------------
+
+- `fill`: Fill all matching cells with the given value
+
 Aggregating/grouping table data
 -------------------------------
+
+NOTE: This needs revision
 
 You can aggregate the values in a table based on one or more unique cell
 values in a given column.
@@ -118,4 +142,48 @@ $table = new Table(
 
 $newInstance = $table->aggregate([0]); // aggregate on the zeroeth column
 $newInstance->getRow(0)->getCell(1); // 28 -- the values have been aggregated
+````
+
+Building upon existing tables
+-----------------------------
+
+Often you will need to add extra columns or rows to existing tables, for
+example to add a column total. This can be done in two steps:
+
+````php
+$table = Table::createBuilder()
+    ->row()
+        ->set('price', 10)
+    ->end()
+    ->row()
+        ->set('price', 20)
+    ->end()
+    ->getTable();
+
+// get a new builder instance based on the existing table
+$builder = $table->builder();
+
+// add a new row with the total price
+$builder
+    ->row()
+        ->set('price', $table->getColumn('price')->sum())
+    ->end();
+
+$table = $builder->getTable();
+
+$table->toArray(); 
+
+$expected = array(
+    array(
+        'price' => 10,
+    ),
+    array(
+        'price' => 20,
+    ),
+    array(
+        'price' => 30
+    ),
+);
+
+var_dump($expected === $table->toArray()); // true
 ````
