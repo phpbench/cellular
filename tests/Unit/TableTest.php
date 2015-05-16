@@ -168,7 +168,7 @@ class TableTest extends AggregateableCase
     public function testGetColumns(Table $table)
     {
         $columns = $table->getColumns();
-        $this->assertContainsOnlyInstancesOf(Column::class, $columns);
+        $this->assertContainsOnlyInstancesOf('DTL\DataTable\Column', $columns);
         $this->assertCount(2, $columns);
     }
 

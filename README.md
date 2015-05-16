@@ -10,7 +10,7 @@ Features:
 - Supports aggregate `sum`, `avg`, `min`, `max` and `median`.
 - Aggreate on `Table`, `Row` or `Column`.
 - Supports cell groups.
-- Fluent buildern
+- Fluent builder
 
 Note that this library has no release and should not be considered stable.
 
@@ -142,4 +142,48 @@ $table = new Table(
 
 $newInstance = $table->aggregate([0]); // aggregate on the zeroeth column
 $newInstance->getRow(0)->getCell(1); // 28 -- the values have been aggregated
+````
+
+Building upon existing tables
+-----------------------------
+
+Often you will need to add extra columns or rows to existing tables, for
+example to add a column total. This can be done in two steps:
+
+````php
+$table = Table::createBuilder()
+    ->row()
+        ->set('price', 10)
+    ->end()
+    ->row()
+        ->set('price', 20)
+    ->end()
+    ->getTable();
+
+// get a new builder instance based on the existing table
+$builder = $table->builder();
+
+// add a new row with the total price
+$builder
+    ->row()
+        ->set('price', $table->getColumn('price')->sum())
+    ->end();
+
+$table = $builder->getTable();
+
+$table->toArray(); 
+
+$expected = array(
+    array(
+        'price' => 10,
+    ),
+    array(
+        'price' => 20,
+    ),
+    array(
+        'price' => 30
+    ),
+);
+
+var_dump($expected === $table->toArray()); // true
 ````

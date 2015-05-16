@@ -72,10 +72,7 @@ abstract class Aggregated implements AggregateableInterface
     }
 
     /**
-     * Fill the table with a value
-     *
-     * @param mixed $value
-     * @param array $groups
+     * {@inheritDoc}
      */
     public function fill($value, array $groups = array())
     {
@@ -85,7 +82,7 @@ abstract class Aggregated implements AggregateableInterface
     }
 
     /**
-     * Apply a closure to each cell
+     * {@inheritDoc}
      */
     public function map(\Closure $closure, array $groups = array())
     {

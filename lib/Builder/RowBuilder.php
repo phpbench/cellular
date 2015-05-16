@@ -38,6 +38,7 @@ class RowBuilder
     /**
      * Create a new cell and place it at the specified column
      *
+     * @param mixed $column
      * @param mixed $value
      * @param array $groups
      */

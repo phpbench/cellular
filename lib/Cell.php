@@ -117,6 +117,22 @@ class Cell implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
+    public function fill($value, array $groups = array())
+    {
+        $this->value = $value;
+    }
+
+    /**
+     * {@inheritDpc}
+     */
+    public function map(\Closure $closure, array $groups = array())
+    {
+        $closure($this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getCells(array $groups = array()) 
     {
         return array($this);
