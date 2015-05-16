@@ -45,19 +45,51 @@ class Table extends Aggregated
      *
      * @return Row[]
      */
-    public function getRows()
+    public function getRows(array $groups = array())
     {
-        return $this->rows;
+        if (empty($groups)) {
+            return $this->rows;
+        }
+
+        $rows = array();
+
+        foreach ($this->rows as $row) {
+            foreach ($groups as $group) {
+                if (in_array($group, $row->getGroups())) {
+                    $rows[] = $row;
+                }
+            }
+        }
+
+        return $rows;
     }
 
     /**
-     * Return the column with the given index
+     * Return the column with the given name
      *
      * @return Column
      */
-    public function getColumn($index)
+    public function getColumn($name)
     {
-        return new Column($this, $index);
+        return new Column($this, $name);
+    }
+
+    /**
+     * Return all the column names
+     *
+     * @return Column[]
+     */
+    public function getColumnNames(array $groups = array())
+    {
+        $columnNames = array();
+
+        foreach ($this->rows as $row) {
+            foreach ($row->getColumnNames($groups) as $columnName) {
+                $columnNames[$columnName] = $columnName;
+            }
+        }
+
+        return array_values($columnNames);
     }
 
     /**
@@ -65,12 +97,11 @@ class Table extends Aggregated
      *
      * @return Column[]
      */
-    public function getColumns()
+    public function getColumns(array $groups = array())
     {
         $columns = array();
-
-        for ($index = 0; $index < $this->getColumnCount(); $index++) {
-            $columns[] = $this->getColumn($index);
+        foreach ($this->getColumnNames($groups) as $columnName) {
+            $columns[] = $this->getColumn($columnName);
         }
 
         return $columns;
@@ -84,11 +115,11 @@ class Table extends Aggregated
      *
      * @return integer
      */
-    public function getColumnCount()
+    public function getColumnCount(array $groups = array())
     {
         $min = null;
         foreach ($this->rows as $row) {
-            $cellCount = count($row->getCells());
+            $cellCount = count($row->cells($groups));
             if ($min === null || $cellCount < $min) {
                 $min = $cellCount;
             }
@@ -119,16 +150,16 @@ class Table extends Aggregated
     /**
      * {@inheritDoc}
      */
-    public function values(array $groups = array())
+    public function cells(array $groups = array())
     {
-        $values = array();
+        $cells = array();
         foreach ($this->rows as $row) {
-            foreach ($row->values($groups) as $value) {
-                $values[] = $value;
+            foreach ($row->cells($groups) as $cell) {
+                $cells[] = $cell;
             }
         }
 
-        return $values;
+        return $cells;
     }
 
     /**
@@ -164,7 +195,7 @@ class Table extends Aggregated
                 $cells[] = new Cell($column->sum());
             }
 
-            return array(new Row($cells));
+            return new Table(array(new Row($cells)));
         } 
         foreach ($this->getRows() as $row) {
             $key = '';
@@ -182,10 +213,23 @@ class Table extends Aggregated
         $rows = array();
         foreach ($newRowSets as $newRowSet) {
             $table = new Table($newRowSet);
-            $aggregateRows = $table->aggregate();
+            $aggregateRows = $table->aggregate()->getRows();
             $rows[] = reset($aggregateRows);
         }
 
         return new Table($rows);
+    }
+
+    public function builder(array $groups = array())
+    {
+        return TableBuilder::create($this, $groups);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGroups()
+    {
+        return array();
     }
 }

@@ -53,7 +53,43 @@ abstract class Aggregated implements AggregateableInterface
         return AggregateHelper::median($this->values($groups), $ceil);
     }
 
-    abstract public function values(array $groups = array());
+    /**
+     * {@inheritDoc}
+     */
+    public function values(array $groups = array()) 
+    {
+        $values = array();
+        foreach ($this->cells($groups) as $column => $cell) {
+            $values[$column] = $cell->value();
+        }
+
+        return $values;
+    }
+
+    /**
+     * Fill the table with a value
+     *
+     * @param mixed $value
+     * @param array $groups
+     */
+    public function fill($value, array $groups = array())
+    {
+        foreach ($this->getRows() as $row) {
+            $row->fill($value, $groups);
+        }
+    }
+
+    /**
+     * Apply a closure to each cell
+     */
+    public function map(\Closure $closure, array $groups = array())
+    {
+        foreach ($this->cells($groups) as $cell) {
+            $cell->setValue($closure($cell));
+        }
+    }
+
+    abstract public function cells(array $groups = array());
 
     abstract public function toArray(array $groups = array());
 }

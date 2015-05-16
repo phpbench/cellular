@@ -100,4 +100,22 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
         $expected = array(2, 13);
         $this->assertEquals($expected, $this->column->values());
     }
+
+    /**
+     * Its should return the groups of the cells contained within
+     */
+    public function testGetGroups()
+    {
+        $table = new Table(array(
+            new Row(array(
+                new Cell(1, array('foo')),
+            )),
+            new Row(array(
+                new Cell(5, array('bar')),
+            )),
+        ));
+
+        $column = new Column($table, 0);
+        $this->assertEquals(array('foo', 'bar'), $column->getGroups());
+    }
 }

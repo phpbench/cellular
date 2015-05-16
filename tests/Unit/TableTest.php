@@ -14,6 +14,7 @@ namespace DTL\DataTable\Tests\Unit;
 use DTL\DataTable\Table;
 use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
+use DTL\DataTable\Column;
 
 class TableTest extends AggregateableCase
 {
@@ -70,12 +71,12 @@ class TableTest extends AggregateableCase
     {
         $table = Table::createBuilder()
             ->row()
-                ->cell('hello', ['group1'])
-                ->cell('goodbye', ['group2'])
+                ->set(0, 'hello', ['group1'])
+                ->set(1, 'goodbye', ['group2'])
             ->end()
             ->row()
-                ->cell('bonjour', ['group1'])
-                ->cell('aurevoir', ['group2'])
+                ->set(0, 'bonjour', ['group1'])
+                ->set(1, 'aurevoir', ['group2'])
             ->end()
             ->getTable();
 
@@ -100,19 +101,19 @@ class TableTest extends AggregateableCase
     {
         $table = Table::createBuilder()
             ->row()
-                ->cell('hello')
-                ->cell(12)
-                ->cell('goodbye')
+                ->set(0, 'hello')
+                ->set(1, 12)
+                ->set(2, 'goodbye')
             ->end()
             ->row()
-                ->cell('hello')
-                ->cell(12)
-                ->cell('goodbye')
+                ->set(0, 'hello')
+                ->set(1, 12)
+                ->set(2, 'goodbye')
             ->end()
             ->row()
-                ->cell('goodbye')
-                ->cell(12)
-                ->cell('bar')
+                ->set(0, 'goodbye')
+                ->set(1, 12)
+                ->set(2, 'bar')
             ->end()
             ->getTable();
 
@@ -121,5 +122,53 @@ class TableTest extends AggregateableCase
         $this->assertCount(2, $newTable->getRows());
         $this->assertEquals(24, $newTable->getRow(0)->getCell(1)->value());
         $this->assertEquals(12, $newTable->getRow(1)->getCell(1)->value());
+    }
+
+    /**
+     * It should return a list of column names
+     */
+    public function testGetColumnNames()
+    {
+        $table = Table::createBuilder()
+            ->row()
+                ->set(0, 'hello', ['one'])
+                ->set(1, 12)
+            ->end()
+            ->row()
+                ->set(0, 'hello')
+                ->set(1, 12)
+            ->end()
+            ->row()
+                ->set(0, 'goodbye', ['one'])
+                ->set(1, 12)
+            ->end()
+            ->getTable();
+
+        $columnNames = $table->getColumnNames();
+        $this->assertEquals(array(0, 1), $columnNames);
+
+        return $table;
+    }
+
+    /**
+     * It should return a list of column names according to group
+     *
+     * @depends testGetColumnNames
+     */
+    public function testGetColumnNamesForGroup(Table $table)
+    {
+        $this->assertEquals(array(0), $table->getColumnNames(['one']));
+    }
+
+    /**
+     * It should return all columns
+     *
+     * @depends testGetColumnNames
+     */
+    public function testGetColumns(Table $table)
+    {
+        $columns = $table->getColumns();
+        $this->assertContainsOnlyInstancesOf(Column::class, $columns);
+        $this->assertCount(2, $columns);
     }
 }

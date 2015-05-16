@@ -16,13 +16,12 @@ use DTL\DataTable\Cell;
 class CellTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * It can say if it is in a group or not.
+     * It can get its groups
      */
     public function testInGroup()
     {
         $cell = new Cell('test', array('foo'));
-        $this->assertTrue($cell->inGroup('foo'));
-        $this->assertFalse($cell->inGroup('bar'));
+        $this->assertEquals(array('foo'), $cell->getGroups());
     }
 
     /**

@@ -27,30 +27,21 @@ class Cell implements AggregateableInterface
     }
 
     /**
-     * Return true if the cell is in the given group.
-     *
-     * @param mixed $group
-     *
-     * @return bool
+     * {@inheritDoc}
      */
-    public function inGroup($group)
+    public function getGroups()
     {
-        return in_array($group, $this->groups);
+        return $this->groups;
     }
 
     /**
-     * Return true if this cell is in one of the given groups
+     * Set the value for this cell
      *
-     * @param array $groups
-     * @return boolean
+     * @param mixed $value
      */
-    public function inGroups(array $groups)
+    public function setValue($value)
     {
-        foreach ($groups as $group) {
-            if ($this->inGroup($group)) {
-                return true;
-            }
-        }
+        $this->value = $value;
     }
 
     /**
@@ -109,5 +100,13 @@ class Cell implements AggregateableInterface
     public function values(array $groups = array())
     {
         return array($this->value);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cells(array $groups = array()) 
+    {
+        return array($this);
     }
 }

@@ -16,32 +16,73 @@ class Row extends Aggregated
     /**
      * @var Row[]
      */
-    protected $cells;
+    private $cells;
+
+    /**
+     * @var string[]
+     */
+    private $groups;
 
     /**
      * @param array $cells
      */
-    public function __construct(array $cells = array())
+    public function __construct(array $cells = array(), array $groups = array())
     {
         $this->cells = $cells;
+        $this->groups = $groups;
     }
 
     /**
-     * Return all the cells of this aggregateable instance.
-     *
-     * @param array $groups
-     *
-     * @return AggregateableInterface[]
+     * {@inheritDoc}
      */
-    public function getCells(array $groups = array())
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    /**
+     * Return all column names
+     *
+     * @return array
+     */
+    public function getColumnNames(array $groups = array())
+    {
+        return array_keys($this->cells($groups));
+    }
+
+    /**
+     * Return the cell at the given column
+     *
+     * @param int $column
+     * @throws \OutOfBoundsException
+     * @return Cell
+     */
+    public function getCell($column)
+    {
+        if (!array_key_exists($column, $this->cells)) {
+            throw new \OutOfBoundsException(sprintf(
+                'No cell exists at column "%d", known columns: "%s"',
+                $column, implode('", "', array_keys($this->cells))
+            ));
+        }
+
+        return $this->cells[$column];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function cells(array $groups = array())
     {
         if (empty($groups)) {
             return $this->cells;
         }
 
         return array_filter($this->cells, function (Cell $cell) use ($groups) {
-            if ($cell->inGroups($groups)) {
-                return true;
+            foreach ($groups as $group) {
+                if (in_array($group, $cell->getGroups())) {
+                    return true;
+                }
             }
 
             return false;
@@ -49,37 +90,16 @@ class Row extends Aggregated
     }
 
     /**
-     * Return the cell with the given index
+     * Fill the row with a value
      *
-     * @param int $index
-     * @throws \OutOfBoundsException
-     * @return Cell
+     * @param mixed $value
+     * @param array $groups
      */
-    public function getCell($index)
+    public function fill($value, array $groups = array())
     {
-        if (!array_key_exists($index, $this->cells)) {
-            throw new \OutOfBoundsException(sprintf(
-                'No cell exists at index "%d", index must be >= 0 and < %d',
-                $index, count($this->cells)
-            ));
+        foreach ($this->cells($groups) as $cell) {
+            $cell->setValue($value);
         }
-
-        return $this->cells[$index];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function values(array $groups = array())
-    {
-        $values = array();
-        foreach ($this->getCells($groups) as $cells) {
-            foreach ($cells->values($groups) as $value) {
-                $values[] = $value;
-            }
-        }
-
-        return $values;
     }
 
     /**
@@ -91,8 +111,8 @@ class Row extends Aggregated
     public function toArray(array $groups = array())
     {
         $result = array();
-        foreach ($this->values($groups) as $value) {
-            $result[] = $value;
+        foreach ($this->values($groups) as $column => $value) {
+            $result[$column] = $value;
         }
 
         return $result;
