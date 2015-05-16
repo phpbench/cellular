@@ -11,6 +11,11 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Represents a table column
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class Column extends Aggregated
 {
     /**
@@ -36,7 +41,7 @@ class Column extends Aggregated
     /**
      * {@inheritDoc}
      */
-    public function cells(array $groups = array())
+    public function getCells(array $groups = array())
     {
         $cells = array();
         foreach ($this->table->getRows() as $row) {
@@ -57,7 +62,7 @@ class Column extends Aggregated
     public function getGroups()
     {
         $groups = array();
-        foreach ($this->cells() as $cell) {
+        foreach ($this->getCells() as $cell) {
             foreach ($cell->getGroups() as $group) {
                 $groups[$group] = $group;
             }

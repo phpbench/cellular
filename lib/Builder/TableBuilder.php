@@ -18,13 +18,13 @@ class TableBuilder
         }
 
         foreach ($table->getRows() as $row) {
-            $cells = $row->cells($groups);
+            $cells = $row->getCells($groups);
 
             if (count($cells) === 0) {
                 continue;
             }
 
-            $this->rows[] = new RowBuilder($this, $row->cells(), $row->getGroups());
+            $this->rows[] = new RowBuilder($this, $row->getCells(), $row->getGroups());
         }
     }
 

@@ -11,9 +11,21 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Represents a data table cell
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class Cell implements AggregateableInterface
 {
+    /**
+     * @var string $groups
+     */
     private $groups;
+
+    /**
+     * @var mixed
+     */
     private $value;
 
     /**
@@ -105,7 +117,7 @@ class Cell implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
-    public function cells(array $groups = array()) 
+    public function getCells(array $groups = array()) 
     {
         return array($this);
     }

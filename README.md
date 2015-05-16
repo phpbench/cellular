@@ -27,14 +27,14 @@ Would be created as follows:
 ````php
 $table = Table::createBuilder()
     ->row()
-        ->cell(12)
-        ->cell(14)
-        ->cell(4)
+        ->set('col1', 12)
+        ->set('col2', 14)
+        ->set('col3', 4)
     ->end()
     ->row()
-        ->cell(12)
-        ->cell(14)
-        ->cell(4)
+        ->set('col1', 12)
+        ->set('col2', 14)
+        ->set('col3', 4)
     ->end()
     ->getTable();
 ````
@@ -44,14 +44,14 @@ Or without the builder:
 ````php
 $table = new Table(
      new Row(array(
-         new Cell(12),
-         new Cell(14),
-         new Cell(4),
+         'col1' => new Cell(12),
+         'col2' => new Cell(14),
+         'col3' => new Cell(4),
      )),
      new Row(array(
-         new Cell(12),
-         new Cell(14),
-         new Cell(4),
+         'col1' => new Cell(12),
+         'col2' => new Cell(14),
+         'col3' => new Cell(4),
      )),
  );
 ````
@@ -81,9 +81,9 @@ Groups can be used to analyze only certain cells:
 ````php
  $table = new Table(
      new Row(array(
-         new Cell(12, ['group1']),
-         new Cell(14, ['group1']),
-         new Cell(4, ['group2']),
+         'col1' => new Cell(12, ['group1']),
+         'col2' => new Cell(14, ['group1']),
+         'col3' => new Cell(4, ['group2']),
      )),
  );
 
@@ -91,8 +91,32 @@ Groups can be used to analyze only certain cells:
  echo $table->sum(['group2']); // 4
 ````
 
+Applying a callback to each cell
+--------------------------------
+
+You can apply a callback to each cell on either a `Table` or a `Row`:
+
+````php
+$table = Table::createBuilder()
+    ->row()
+        ->set('col1', 'foobar')
+    ->end()
+    ->getTable();
+
+$table->map(function (Cell $cell) {
+    $cell->setValue($cell->value() + 1);
+});
+````
+
+Other methods
+-------------
+
+- `fill`: Fill all matching cells with the given value
+
 Aggregating/grouping table data
 -------------------------------
+
+NOTE: This needs revision
 
 You can aggregate the values in a table based on one or more unique cell
 values in a given column.

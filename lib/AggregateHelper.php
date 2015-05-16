@@ -11,6 +11,11 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Utility class for aggregate functions
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class AggregateHelper
 {
     public static function sum(array $values = array())

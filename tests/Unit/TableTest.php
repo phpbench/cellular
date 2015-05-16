@@ -171,4 +171,15 @@ class TableTest extends AggregateableCase
         $this->assertContainsOnlyInstancesOf(Column::class, $columns);
         $this->assertCount(2, $columns);
     }
+
+    /**
+     * It should return all columns
+     *
+     * @depends testGetColumnNames
+     */
+    public function testGetColumnCount(Table $table)
+    {
+        $count = $table->getColumnCount();
+        $this->assertEquals(2, $count);
+    }
 }

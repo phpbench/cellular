@@ -15,6 +15,11 @@ use DTL\DataTable\Column;
 use DTL\DataTable\Builder\TableBuilder;
 use DTL\DataTable\Table;
 
+/**
+ * Represents a table
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class Table extends Aggregated
 {
     /**
@@ -119,7 +124,7 @@ class Table extends Aggregated
     {
         $min = null;
         foreach ($this->rows as $row) {
-            $cellCount = count($row->cells($groups));
+            $cellCount = count($row->getCells($groups));
             if ($min === null || $cellCount < $min) {
                 $min = $cellCount;
             }
@@ -150,11 +155,11 @@ class Table extends Aggregated
     /**
      * {@inheritDoc}
      */
-    public function cells(array $groups = array())
+    public function getCells(array $groups = array())
     {
         $cells = array();
         foreach ($this->rows as $row) {
-            foreach ($row->cells($groups) as $cell) {
+            foreach ($row->getCells($groups) as $cell) {
                 $cells[] = $cell;
             }
         }
@@ -181,6 +186,8 @@ class Table extends Aggregated
     /**
      * Return a new table that has rows representing the grouped and
      * aggregated values based on the given column indexes.
+     *
+     * TODO: This is wrong.
      *
      * @param array $columnIndexes
      * @return array

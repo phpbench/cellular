@@ -11,6 +11,11 @@
 
 namespace DTL\DataTable;
 
+/**
+ * Represents a table row
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class Row extends Aggregated
 {
     /**
@@ -47,7 +52,7 @@ class Row extends Aggregated
      */
     public function getColumnNames(array $groups = array())
     {
-        return array_keys($this->cells($groups));
+        return array_keys($this->getCells($groups));
     }
 
     /**
@@ -72,7 +77,7 @@ class Row extends Aggregated
     /**
      * {@inheritDoc}
      */
-    public function cells(array $groups = array())
+    public function getCells(array $groups = array())
     {
         if (empty($groups)) {
             return $this->cells;
@@ -87,19 +92,6 @@ class Row extends Aggregated
 
             return false;
         });
-    }
-
-    /**
-     * Fill the row with a value
-     *
-     * @param mixed $value
-     * @param array $groups
-     */
-    public function fill($value, array $groups = array())
-    {
-        foreach ($this->cells($groups) as $cell) {
-            $cell->setValue($value);
-        }
     }
 
     /**
