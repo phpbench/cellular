@@ -74,14 +74,14 @@ interface AggregateableInterface
     public function values(array $groups = array());
 
     /**
-     * Return the groups of which this instance is a part
+     * Return the groups of which this instance is a part.
      *
      * @return array Group names
      */
     public function getGroups();
 
     /**
-     * Fill the table with a value
+     * Fill the table with a value.
      *
      * @param mixed $value
      * @param array $groups
@@ -89,7 +89,7 @@ interface AggregateableInterface
     public function fill($value, array $groups = array());
 
     /**
-     * Apply a closure to each cell
+     * Apply a closure to each cell.
      *
      * @param \Closure $closure
      * @param array $groups

@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Table;
-use DTL\DataTable\Builder\RowBuilder;
 
 class TableBuilder
 {
@@ -29,6 +37,7 @@ class TableBuilder
      * RowBuilder instances and the cells will be cloned.
      *
      * @param array $rows
+     *
      * @return TableBuilder
      */
     public static function create(array $rows = array(), array $groups = array())
@@ -37,7 +46,7 @@ class TableBuilder
     }
 
     /**
-     * Create a new RowBuilder and return it
+     * Create a new RowBuilder and return it.
      *
      * @return RowBuilder
      */
@@ -62,7 +71,7 @@ class TableBuilder
     }
 
     /**
-     * Return all of the row builders
+     * Return all of the row builders.
      *
      * @return RowBuilder[]
      */
@@ -72,7 +81,7 @@ class TableBuilder
     }
 
     /**
-     * Create a new Table
+     * Create a new Table.
      *
      * @return Table
      */
@@ -89,7 +98,7 @@ class TableBuilder
     }
 
     /**
-     * Fill in any empty cells with NULL
+     * Fill in any empty cells with NULL.
      */
     protected function finalize()
     {

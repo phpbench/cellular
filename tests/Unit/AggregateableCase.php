@@ -94,7 +94,7 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should apply a closure to each cell
+     * It should apply a closure to each cell.
      */
     public function testMap()
     {

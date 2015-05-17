@@ -12,14 +12,14 @@
 namespace DTL\DataTable;
 
 /**
- * Represents a data table cell
+ * Represents a data table cell.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
 class Cell implements AggregateableInterface
 {
     /**
-     * @var string $groups
+     * @var string
      */
     private $groups;
 
@@ -47,7 +47,7 @@ class Cell implements AggregateableInterface
     }
 
     /**
-     * Set the value for this cell
+     * Set the value for this cell.
      *
      * @param mixed $value
      */
@@ -123,7 +123,7 @@ class Cell implements AggregateableInterface
     }
 
     /**
-     * {@inheritDpc}
+     * {@inheritDpc}.
      */
     public function map(\Closure $closure, array $groups = array())
     {
@@ -133,7 +133,7 @@ class Cell implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
-    public function getCells(array $groups = array()) 
+    public function getCells(array $groups = array())
     {
         return array($this);
     }

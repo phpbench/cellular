@@ -44,7 +44,7 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * It should return an array representation
+     * It should return an array representation.
      */
     public function testToArray()
     {
@@ -60,7 +60,7 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * Its should fill
+     * Its should fill.
      */
     public function testFill()
     {

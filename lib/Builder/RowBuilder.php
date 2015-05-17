@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Cell;
@@ -24,7 +33,7 @@ class RowBuilder
 
     /**
      * @param TableBuilder $tableBuilder
-     * @param array $cells 
+     * @param array $cells
      * @param array $groups
      */
     public function __construct(TableBuilder $tableBuilder = null, array $cells = array(), array $groups = array())
@@ -37,7 +46,7 @@ class RowBuilder
     }
 
     /**
-     * Create a new instance
+     * Create a new instance.
      *
      * @param TableBuilder $tableBuilder
      * @param array $cells
@@ -49,7 +58,7 @@ class RowBuilder
     }
 
     /**
-     * Create a new cell and place it at the specified column
+     * Create a new cell and place it at the specified column.
      *
      * @param mixed $column
      * @param mixed $value
@@ -58,11 +67,12 @@ class RowBuilder
     public function set($column, $value, array $groups = array())
     {
         $this->cells[$column] = new Cell($value, $groups);
+
         return $this;
     }
 
     /**
-     * Return the column names
+     * Return the column names.
      *
      * @return array
      */
@@ -72,7 +82,7 @@ class RowBuilder
     }
 
     /**
-     * Create a new Row
+     * Create a new Row.
      *
      * @return Row
      */
@@ -82,7 +92,7 @@ class RowBuilder
     }
 
     /**
-     * Return the parent TableBuilder
+     * Return the parent TableBuilder.
      */
     public function end()
     {

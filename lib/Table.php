@@ -11,13 +11,11 @@
 
 namespace DTL\DataTable;
 
-use DTL\DataTable\Column;
 use DTL\DataTable\Builder\TableBuilder;
-use DTL\DataTable\Table;
 use DTL\DataTable\Builder\RowBuilder;
 
 /**
- * Represents a table
+ * Represents a table.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -37,7 +35,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return all the rows
+     * Return all the rows.
      *
      * @return Row[]
      */
@@ -61,7 +59,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return the column with the given name
+     * Return the column with the given name.
      *
      * @return Column
      */
@@ -71,7 +69,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return all the column names
+     * Return all the column names.
      *
      * @return Column[]
      */
@@ -89,7 +87,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return all the columns
+     * Return all the columns.
      *
      * @return Column[]
      */
@@ -109,7 +107,7 @@ class Table extends Aggregated
      * Note if the number of cells is not uniform, the number of columns
      * will reflect the row with the least number of cells.
      *
-     * @return integer
+     * @return int
      */
     public function getColumnCount(array $groups = array())
     {
@@ -125,10 +123,12 @@ class Table extends Aggregated
     }
 
     /**
-     * Return the row with the given index
+     * Return the row with the given index.
      *
      * @param int $index
+     *
      * @throws \OutOfRangeException
+     *
      * @return Row
      */
     public function getRow($index)
@@ -159,9 +159,10 @@ class Table extends Aggregated
     }
 
     /**
-     * Return an array representation of this table
+     * Return an array representation of this table.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function toArray(array $groups = array())
@@ -189,11 +190,12 @@ class Table extends Aggregated
      *     function (Table $rowSet, Row $newRow) {
      *         $newRow->set('foo', $rowSet->getColumn('foo')->sum());
      *     }.
-     *     array('col1', 'col2'), 
+     *     array('col1', 'col2'),
      * );
      * ````
      *
      * @return \Closure $callback
+     *
      * @param array $columnNames
      * @param array $groups
      */
@@ -220,9 +222,7 @@ class Table extends Aggregated
         foreach ($rowSets as $rowSet) {
             $rows = $rowSet->getRows();
             $firstRowBuilder = reset($rows);
-            if ($callback) {
-                $callback($rowSet->getTable(), $firstRowBuilder);
-            }
+            $callback($rowSet->getTable(), $firstRowBuilder);
             $groupedTable->addRow($firstRowBuilder);
         }
 

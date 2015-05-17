@@ -16,7 +16,7 @@ use DTL\DataTable\Cell;
 class CellTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * It can get its groups
+     * It can get its groups.
      */
     public function testInGroup()
     {

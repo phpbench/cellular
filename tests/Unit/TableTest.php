@@ -15,7 +15,6 @@ use DTL\DataTable\Table;
 use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Column;
-use DTL\DataTable\Builder\RowBuilder;
 use DTL\DataTable\Builder\TableBuilder;
 
 class TableTest extends AggregateableCase
@@ -28,7 +27,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should get columns
+     * It should get columns.
      */
     public function testGetColumn()
     {
@@ -37,7 +36,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return an array representation
+     * It should return an array representation.
      */
     public function testToArray()
     {
@@ -51,23 +50,23 @@ class TableTest extends AggregateableCase
                 new Cell('goodbye'),
             )),
         ));
-                
+
         $expected = array(
             array(
-                4, 
-                2
+                4,
+                2,
             ),
             array(
                 'hello',
-                'goodbye'
-            )
+                'goodbye',
+            ),
         );
 
         $this->assertEquals($expected, $table->toArray());
     }
 
     /**
-     * It should aggregate to one row if an empty callback with no column names is given
+     * It should aggregate to one row if an empty callback with no column names is given.
      */
     public function testAggregate()
     {
@@ -96,7 +95,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should aggregate to the unique values of the given columns
+     * It should aggregate to the unique values of the given columns.
      *
      * @depends testAggregate
      */
@@ -108,7 +107,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should apply the callback to the aggregate
+     * It should apply the callback to the aggregate.
      *
      * @depends testAggregate
      */
@@ -121,11 +120,11 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return a list of column names
+     * It should return a list of column names.
      */
     public function testGetColumnNames()
     {
-        $table = ToableBuilder::create()
+        $table = TableBuilder::create()
             ->row()
                 ->set(0, 'hello', ['one'])
                 ->set(1, 12)
@@ -147,7 +146,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return a list of column names according to group
+     * It should return a list of column names according to group.
      *
      * @depends testGetColumnNames
      */
@@ -157,7 +156,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return all columns
+     * It should return all columns.
      *
      * @depends testGetColumnNames
      */
@@ -169,7 +168,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return all columns
+     * It should return all columns.
      *
      * @depends testGetColumnNames
      */
