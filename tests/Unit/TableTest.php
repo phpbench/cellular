@@ -16,6 +16,7 @@ use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Column;
 use DTL\DataTable\Builder\RowBuilder;
+use DTL\DataTable\Builder\TableBuilder;
 
 class TableTest extends AggregateableCase
 {
@@ -66,41 +67,11 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should provide a table builder
-     */
-    public function testTableBuilder()
-    {
-        $table = Table::createBuilder()
-            ->row()
-                ->set(0, 'hello', ['group1'])
-                ->set(1, 'goodbye', ['group2'])
-            ->end()
-            ->row()
-                ->set(0, 'bonjour', ['group1'])
-                ->set(1, 'aurevoir', ['group2'])
-            ->end()
-            ->getTable();
-
-        $expectedTable = new Table(array(
-            new Row(array(
-                new Cell('hello', ['group1']),
-                new Cell('goodbye', ['group2']),
-            )),
-            new Row(array(
-                new Cell('bonjour', ['group1']),
-                new Cell('aurevoir', ['group2']),
-            )),
-        ));
-
-        $this->assertEquals($expectedTable, $table);
-    }
-
-    /**
      * It should aggregate to one row if an empty callback with no column names is given
      */
     public function testAggregate()
     {
-        $table = Table::createBuilder()
+        $table = TableBuilder::create()
             ->row()
                 ->set(0, 'hello')
                 ->set(1, 12)
@@ -154,7 +125,7 @@ class TableTest extends AggregateableCase
      */
     public function testGetColumnNames()
     {
-        $table = Table::createBuilder()
+        $table = ToableBuilder::create()
             ->row()
                 ->set(0, 'hello', ['one'])
                 ->set(1, 12)

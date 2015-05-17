@@ -25,7 +25,7 @@ Col 1 | Col 2 | Col 3
 Would be created as follows:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('col1', 12)
         ->set('col2', 14)
@@ -97,7 +97,7 @@ Applying a callback to each cell
 You can apply a callback to each cell on either a `Table` or a `Row`:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('col1', 'foobar')
     ->end()
@@ -152,7 +152,7 @@ Often you will need to add extra columns or rows to existing tables, for
 example to add a column total. This can be done in two steps:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('price', 10)
     ->end()

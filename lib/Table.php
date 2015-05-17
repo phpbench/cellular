@@ -37,16 +37,6 @@ class Table extends Aggregated
     }
 
     /**
-     * Create a new table builder
-     *
-     * @return TableBuilder
-     */
-    public static function createBuilder()
-    {
-        return new TableBuilder();
-    }
-
-    /**
      * Return all the rows
      *
      * @return Row[]
@@ -188,18 +178,18 @@ class Table extends Aggregated
      * Return a new table instance with only the rows which
      * contain unique column names according to $columnNames.
      *
-     * The optional callback accepts, for each set of unique $columnNames, a
+     * The callback accepts, for each set of unique $columnNames, a
      * Table with the unique set and the Row instance which will represent
      * that set in the final Table instance.
      *
      * For example:
      *
      * ````
-     * $groupedTable = $table->group(
-     *     array('col1', 'col2'), 
+     * $aggregatedTable = $table->aggregate(
      *     function (Table $rowSet, Row $newRow) {
-     *         $newRow->set('foo', $rowSet->column('foo')->sum());
-     *     }
+     *         $newRow->set('foo', $rowSet->getColumn('foo')->sum());
+     *     }.
+     *     array('col1', 'col2'), 
      * );
      * ````
      *
