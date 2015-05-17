@@ -11,6 +11,8 @@
 
 namespace DTL\DataTable;
 
+use DTL\DataTable\Cell;
+
 /**
  * Represents a table row.
  *

@@ -6,9 +6,7 @@
  * (c) Daniel Leech <daniel@dantleech.com>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
+ * file that was distributed with this source code.  */ 
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Table;
@@ -117,5 +115,24 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
 
         $column = new Column($table, 0);
         $this->assertEquals(array('foo', 'bar'), $column->getGroups());
+    }
+
+    /**
+     * Its hould return cells
+     */
+    public function testGetCells()
+    {
+        $table = new Table(array(
+            new Row(array(
+                new Cell(1, array('foo')),
+            )),
+            new Row(array(
+                new Cell(5, array('bar')),
+            )),
+        ));
+
+        $column = new Column($table, 0);
+        $this->assertCount(2, $column->getCells());
+        $this->assertCount(1, $column->getCells(array('foo')));
     }
 }

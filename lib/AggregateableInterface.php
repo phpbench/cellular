@@ -74,9 +74,9 @@ interface AggregateableInterface
     public function values(array $groups = array());
 
     /**
-     * Return the groups of which this instance is a part.
+     * Return the group names of which this instance is a part.
      *
-     * @return array Group names
+     * @return array
      */
     public function getGroups();
 

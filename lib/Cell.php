@@ -19,7 +19,7 @@ namespace DTL\DataTable;
 class Cell implements AggregateableInterface
 {
     /**
-     * @var string
+     * @var array
      */
     private $groups;
 

@@ -12,6 +12,7 @@
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Table;
+use DTL\DataTable\Row;
 
 class TableBuilder
 {
@@ -36,7 +37,7 @@ class TableBuilder
      * An array of Row instances can be passed, these will be converted into
      * RowBuilder instances and the cells will be cloned.
      *
-     * @param array $rows
+     * @param Row[] $rows
      *
      * @return TableBuilder
      */

@@ -13,6 +13,7 @@ namespace DTL\DataTable;
 
 use DTL\DataTable\Builder\TableBuilder;
 use DTL\DataTable\Builder\RowBuilder;
+use DTL\DataTable\Table;
 
 /**
  * Represents a table.
@@ -61,7 +62,7 @@ class Table extends Aggregated
     /**
      * Return the column with the given name.
      *
-     * @return Column
+     * @return string Column
      */
     public function getColumn($name)
     {
@@ -194,10 +195,9 @@ class Table extends Aggregated
      * );
      * ````
      *
-     * @return \Closure $callback
-     *
      * @param array $columnNames
      * @param array $groups
+     * @return Table $callback
      */
     public function aggregate(\Closure $callback, array $columnNames = array(), array $groups = array())
     {

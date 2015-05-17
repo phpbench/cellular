@@ -46,8 +46,10 @@ class Column extends Aggregated
         $cells = array();
         foreach ($this->table->getRows() as $row) {
             $cell = $row->getCell($this->key);
-            if (!empty($groups) && !$cell->inGroup($groups)) {
-                continue;
+            foreach ($groups as $group) {
+                if (!in_array($group, $cell->getGroups())) {
+                    continue 2;
+                }
             }
 
             $cells[] = $cell;
