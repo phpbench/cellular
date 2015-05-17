@@ -15,6 +15,7 @@ use DTL\DataTable\Table;
 use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Column;
+use DTL\DataTable\Builder\RowBuilder;
 
 class TableTest extends AggregateableCase
 {
@@ -95,7 +96,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should produce a new aggregated table based on unique column values
+     * It should aggregate to one row if an empty callback with no column names is given
      */
     public function testAggregate()
     {
@@ -117,11 +118,35 @@ class TableTest extends AggregateableCase
             ->end()
             ->getTable();
 
-        $newTable = $table->aggregate(array(0));
-        $this->assertNotSame($table, $newTable);
-        $this->assertCount(2, $newTable->getRows());
-        $this->assertEquals(24, $newTable->getRow(0)->getCell(1)->value());
-        $this->assertEquals(12, $newTable->getRow(1)->getCell(1)->value());
+        $aggregated = $table->aggregate(function () {});
+        $this->assertCount(1, $aggregated->getRows());
+
+        return $table;
+    }
+
+    /**
+     * It should aggregate to the unique values of the given columns
+     *
+     * @depends testAggregate
+     */
+    public function testAggregateColumns($table)
+    {
+        $aggregated = $table->aggregate(function () {}, array(0));
+        $this->assertCount(2, $aggregated->getRows());
+        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->value());
+    }
+
+    /**
+     * It should apply the callback to the aggregate
+     *
+     * @depends testAggregate
+     */
+    public function testAggregateColumnsCallback($table)
+    {
+        $aggregated = $table->aggregate(function ($table, $row) {
+            $row->set(1, $table->getColumn(1)->sum());
+        }, array(0));
+        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->value());
     }
 
     /**

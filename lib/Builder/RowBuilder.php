@@ -24,15 +24,28 @@ class RowBuilder
 
     /**
      * @param TableBuilder $tableBuilder
-     * @param array $cells
+     * @param array $cells 
+     * @param array $groups
      */
-    public function __construct(TableBuilder $tableBuilder, array $cells = array(), array $groups = array())
+    public function __construct(TableBuilder $tableBuilder = null, array $cells = array(), array $groups = array())
     {
         $this->tableBuilder = $tableBuilder;
         foreach ($cells as $column => $cell) {
             $this->cells[$column] = clone $cell;
         }
         $this->groups = $groups;
+    }
+
+    /**
+     * Create a new instance
+     *
+     * @param TableBuilder $tableBuilder
+     * @param array $cells
+     * @param array $groups
+     */
+    public static function create(TableBuilder $tableBuilder = null, array $cells = array(), array $groups = array())
+    {
+        return new self($tableBuilder, $cells, $groups);
     }
 
     /**
@@ -46,17 +59,6 @@ class RowBuilder
     {
         $this->cells[$column] = new Cell($value, $groups);
         return $this;
-    }
-
-    /**
-     * Return true if the row builder as the given column name set
-     *
-     * @return bool
-     */
-    public function has($column)
-    {
-        return array_key_exists($column, $this->cells);
-
     }
 
     /**
@@ -84,6 +86,13 @@ class RowBuilder
      */
     public function end()
     {
+        if (null === $this->tableBuilder) {
+            throw new \BadMethodCallException(sprintf(
+                'This row builder with columns "%s" is not attached to a table builder, cannot call end()',
+                implode('", "', array_keys($this->cells))
+            ));
+        }
+
         return $this->tableBuilder;
     }
 

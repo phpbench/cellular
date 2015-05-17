@@ -116,32 +116,33 @@ Other methods
 Aggregating/grouping table data
 -------------------------------
 
-NOTE: This needs revision
-
 You can aggregate the values in a table based on one or more unique cell
 values in a given column.
 
 ````php
 $table = new Table(
     new Row(array(
-        new Cell('beer'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('beer'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
     new Row(array(
-        new Cell('beer'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('beer'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
     new Row(array(
-        new Cell('snitzel'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('snitzel'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
 );
 
-$newInstance = $table->aggregate([0]); // aggregate on the zeroeth column
-$newInstance->getRow(0)->getCell(1); // 28 -- the values have been aggregated
+$newInstance = $table->aggregate(function (Table $rowSet, RowBuilder $rowBuilder) {
+    $rowBuilder->set('quantity', $rowSet->sum());
+}, ['category']);
+
+$newInstance->getRow(0)->getCell('quantity'); // 28 -- the values have been aggregated
 ````
 
 Building upon existing tables

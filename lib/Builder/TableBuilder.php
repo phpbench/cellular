@@ -3,6 +3,7 @@
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Table;
+use DTL\DataTable\Builder\RowBuilder;
 
 class TableBuilder
 {
@@ -11,20 +12,13 @@ class TableBuilder
      */
     private $rows = array();
 
-    public function __construct(Table $table = null, array $groups = array())
+    /**
+     * @param Row[] $rows
+     */
+    public function __construct(array $rows = array())
     {
-        if (null === $table) {
-            return;
-        }
-
-        foreach ($table->getRows() as $row) {
-            $cells = $row->getCells($groups);
-
-            if (count($cells) === 0) {
-                continue;
-            }
-
-            $this->rows[] = new RowBuilder($this, $row->getCells(), $row->getGroups());
+        foreach ($rows as $row) {
+            $this->rows[] = RowBuilder::create($this, $row->getCells(), $row->getGroups());
         }
     }
 
@@ -37,9 +31,9 @@ class TableBuilder
      * @param array $rows
      * @return TableBuilder
      */
-    public static function create(Table $table = null, array $groups = array())
+    public static function create(array $rows = array(), array $groups = array())
     {
-        return new self($table, $groups);
+        return new self($rows, $groups);
     }
 
     /**
@@ -56,11 +50,23 @@ class TableBuilder
     }
 
     /**
+     * Add a row builder, returns this instance.
+     *
+     * @return TableBuilder
+     */
+    public function addRow(RowBuilder $row)
+    {
+        $this->rows[] = $row;
+
+        return $this;
+    }
+
+    /**
      * Return all of the row builders
      *
      * @return RowBuilder[]
      */
-    public function getRowBuilders()
+    public function getRows()
     {
         return $this->rows;
     }
