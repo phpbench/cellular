@@ -133,7 +133,7 @@ class Cell implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
-    public function getCells(array $groups = array())
+    public function getCells()
     {
         return array($this);
     }

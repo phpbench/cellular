@@ -41,9 +41,9 @@ class TableBuilder
      *
      * @return TableBuilder
      */
-    public static function create(array $rows = array(), array $groups = array())
+    public static function create(array $rows = array())
     {
-        return new self($rows, $groups);
+        return new self($rows);
     }
 
     /**

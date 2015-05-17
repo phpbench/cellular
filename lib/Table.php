@@ -218,7 +218,6 @@ class Table extends Aggregated
             }
         }
 
-        $rows = array();
         foreach ($rowSets as $rowSet) {
             $rows = $rowSet->getRows();
             $firstRowBuilder = reset($rows);
