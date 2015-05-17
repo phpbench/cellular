@@ -3,7 +3,7 @@ Data Table
 
 [![Build Status](https://travis-ci.org/dantleech/data-table.svg?branch=master)](https://travis-ci.org/dantleech/data-table)
 
-The data table library provides an object oriented way of representing and analyzing tabular data.
+The data table library provides an object oriented way of building, representing and analyzing tabular data.
 
 Features:
 

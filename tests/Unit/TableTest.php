@@ -74,7 +74,7 @@ class TableTest extends AggregateableCase
             ->row()
                 ->set(0, 'hello')
                 ->set(1, 12)
-                ->set(2, 'goodbye')
+                ->set(2, 'goodbye', array('group1'))
             ->end()
             ->row()
                 ->set(0, 'hello')
@@ -117,6 +117,19 @@ class TableTest extends AggregateableCase
             $row->set(1, $table->getColumn(1)->sum());
         }, array(0));
         $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->value());
+    }
+
+    /**
+     * Its should preserve groups when aggregatating
+     *
+     * @depends testAggregate
+     */
+    public function testAggregateWithGroups($table)
+    {
+        $aggregated = $table->aggregate(function ($table, $row) {
+            $row->set(1, $table->getColumn(2)->getGroups());
+        }, array(0));
+        $this->assertEquals(array('group1'), $aggregated->getRow(0)->getCell(1)->value());
     }
 
     /**
