@@ -7,12 +7,15 @@ The data table library provides an object oriented way of building, representing
 
 Features:
 
-- Supports aggregate `sum`, `avg`, `min`, `max` and `median`.
-- Aggreate on `Table`, `Row` or `Column`.
+- Supports aggregate functions `sum`, `avg`, `min`, `max` and `median`.
+- Aggreate functions can applied to `Table`, `Row` and `Column`.
 - Supports cell groups.
-- Fluent builder
+- Callbacks can be applied to cells on whole, or selected groups of `Table`,
+  `Row` and `Column` instances.
+- Produce grouped tables with callbacks - analagous to `SELECT bar, SUM(foo) FROM sometable GROUP BY bar`
+- Fluent table builder
 
-Note that this library has no release and should not be considered stable.
+Note that this library is under development.
 
 Creating
 --------
