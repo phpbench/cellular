@@ -12,7 +12,7 @@
 namespace DTL\DataTable;
 
 /**
- * Represents a table row
+ * Represents a table row.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -46,7 +46,7 @@ class Row extends Aggregated
     }
 
     /**
-     * Return all column names
+     * Return all column names.
      *
      * @return array
      */
@@ -56,10 +56,12 @@ class Row extends Aggregated
     }
 
     /**
-     * Return the cell at the given column
+     * Return the cell at the given column.
      *
      * @param int $column
+     *
      * @throws \OutOfBoundsException
+     *
      * @return Cell
      */
     public function getCell($column)
@@ -95,9 +97,10 @@ class Row extends Aggregated
     }
 
     /**
-     * Return an array representation of this row
+     * Return an array representation of this row.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function toArray(array $groups = array())

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Table;
@@ -11,20 +20,13 @@ class TableBuilder
      */
     private $rows = array();
 
-    public function __construct(Table $table = null, array $groups = array())
+    /**
+     * @param Row[] $rows
+     */
+    public function __construct(array $rows = array())
     {
-        if (null === $table) {
-            return;
-        }
-
-        foreach ($table->getRows() as $row) {
-            $cells = $row->getCells($groups);
-
-            if (count($cells) === 0) {
-                continue;
-            }
-
-            $this->rows[] = new RowBuilder($this, $row->getCells(), $row->getGroups());
+        foreach ($rows as $row) {
+            $this->rows[] = RowBuilder::create($this, $row->getCells(), $row->getGroups());
         }
     }
 
@@ -35,15 +37,16 @@ class TableBuilder
      * RowBuilder instances and the cells will be cloned.
      *
      * @param array $rows
+     *
      * @return TableBuilder
      */
-    public static function create(Table $table = null, array $groups = array())
+    public static function create(array $rows = array(), array $groups = array())
     {
-        return new self($table, $groups);
+        return new self($rows, $groups);
     }
 
     /**
-     * Create a new RowBuilder and return it
+     * Create a new RowBuilder and return it.
      *
      * @return RowBuilder
      */
@@ -56,17 +59,29 @@ class TableBuilder
     }
 
     /**
-     * Return all of the row builders
+     * Add a row builder, returns this instance.
+     *
+     * @return TableBuilder
+     */
+    public function addRow(RowBuilder $row)
+    {
+        $this->rows[] = $row;
+
+        return $this;
+    }
+
+    /**
+     * Return all of the row builders.
      *
      * @return RowBuilder[]
      */
-    public function getRowBuilders()
+    public function getRows()
     {
         return $this->rows;
     }
 
     /**
-     * Create a new Table
+     * Create a new Table.
      *
      * @return Table
      */
@@ -83,7 +98,7 @@ class TableBuilder
     }
 
     /**
-     * Fill in any empty cells with NULL
+     * Fill in any empty cells with NULL.
      */
     protected function finalize()
     {

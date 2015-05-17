@@ -102,7 +102,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Its should return the groups of the cells contained within
+     * Its should return the groups of the cells contained within.
      */
     public function testGetGroups()
     {

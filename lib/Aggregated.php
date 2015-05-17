@@ -12,7 +12,7 @@
 namespace DTL\DataTable;
 
 /**
- * Abstract class for Table and Row and Column instances
+ * Abstract class for Table and Row and Column instances.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -61,7 +61,7 @@ abstract class Aggregated implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
-    public function values(array $groups = array()) 
+    public function values(array $groups = array())
     {
         $values = array();
         foreach ($this->getCells($groups) as $column => $cell) {

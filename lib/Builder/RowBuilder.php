@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Builder;
 
 use DTL\DataTable\Cell;
@@ -25,8 +34,9 @@ class RowBuilder
     /**
      * @param TableBuilder $tableBuilder
      * @param array $cells
+     * @param array $groups
      */
-    public function __construct(TableBuilder $tableBuilder, array $cells = array(), array $groups = array())
+    public function __construct(TableBuilder $tableBuilder = null, array $cells = array(), array $groups = array())
     {
         $this->tableBuilder = $tableBuilder;
         foreach ($cells as $column => $cell) {
@@ -36,7 +46,19 @@ class RowBuilder
     }
 
     /**
-     * Create a new cell and place it at the specified column
+     * Create a new instance.
+     *
+     * @param TableBuilder $tableBuilder
+     * @param array $cells
+     * @param array $groups
+     */
+    public static function create(TableBuilder $tableBuilder = null, array $cells = array(), array $groups = array())
+    {
+        return new self($tableBuilder, $cells, $groups);
+    }
+
+    /**
+     * Create a new cell and place it at the specified column.
      *
      * @param mixed $column
      * @param mixed $value
@@ -45,22 +67,12 @@ class RowBuilder
     public function set($column, $value, array $groups = array())
     {
         $this->cells[$column] = new Cell($value, $groups);
+
         return $this;
     }
 
     /**
-     * Return true if the row builder as the given column name set
-     *
-     * @return bool
-     */
-    public function has($column)
-    {
-        return array_key_exists($column, $this->cells);
-
-    }
-
-    /**
-     * Return the column names
+     * Return the column names.
      *
      * @return array
      */
@@ -70,7 +82,7 @@ class RowBuilder
     }
 
     /**
-     * Create a new Row
+     * Create a new Row.
      *
      * @return Row
      */
@@ -80,10 +92,17 @@ class RowBuilder
     }
 
     /**
-     * Return the parent TableBuilder
+     * Return the parent TableBuilder.
      */
     public function end()
     {
+        if (null === $this->tableBuilder) {
+            throw new \BadMethodCallException(sprintf(
+                'This row builder with columns "%s" is not attached to a table builder, cannot call end()',
+                implode('", "', array_keys($this->cells))
+            ));
+        }
+
         return $this->tableBuilder;
     }
 

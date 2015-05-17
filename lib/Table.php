@@ -11,12 +11,11 @@
 
 namespace DTL\DataTable;
 
-use DTL\DataTable\Column;
 use DTL\DataTable\Builder\TableBuilder;
-use DTL\DataTable\Table;
+use DTL\DataTable\Builder\RowBuilder;
 
 /**
- * Represents a table
+ * Represents a table.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -36,17 +35,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Create a new table builder
-     *
-     * @return TableBuilder
-     */
-    public static function createBuilder()
-    {
-        return new TableBuilder();
-    }
-
-    /**
-     * Return all the rows
+     * Return all the rows.
      *
      * @return Row[]
      */
@@ -70,7 +59,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return the column with the given name
+     * Return the column with the given name.
      *
      * @return Column
      */
@@ -80,7 +69,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return all the column names
+     * Return all the column names.
      *
      * @return Column[]
      */
@@ -98,7 +87,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return all the columns
+     * Return all the columns.
      *
      * @return Column[]
      */
@@ -118,7 +107,7 @@ class Table extends Aggregated
      * Note if the number of cells is not uniform, the number of columns
      * will reflect the row with the least number of cells.
      *
-     * @return integer
+     * @return int
      */
     public function getColumnCount(array $groups = array())
     {
@@ -134,10 +123,12 @@ class Table extends Aggregated
     }
 
     /**
-     * Return the row with the given index
+     * Return the row with the given index.
      *
      * @param int $index
+     *
      * @throws \OutOfRangeException
+     *
      * @return Row
      */
     public function getRow($index)
@@ -168,9 +159,10 @@ class Table extends Aggregated
     }
 
     /**
-     * Return an array representation of this table
+     * Return an array representation of this table.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function toArray(array $groups = array())
@@ -184,52 +176,62 @@ class Table extends Aggregated
     }
 
     /**
-     * Return a new table that has rows representing the grouped and
-     * aggregated values based on the given column indexes.
+     * Return a new table instance with only the rows which
+     * contain unique column names according to $columnNames.
      *
-     * TODO: This is wrong.
+     * The callback accepts, for each set of unique $columnNames, a
+     * Table with the unique set and the Row instance which will represent
+     * that set in the final Table instance.
      *
-     * @param array $columnIndexes
-     * @return array
+     * For example:
+     *
+     * ````
+     * $aggregatedTable = $table->aggregate(
+     *     function (Table $rowSet, Row $newRow) {
+     *         $newRow->set('foo', $rowSet->getColumn('foo')->sum());
+     *     }.
+     *     array('col1', 'col2'),
+     * );
+     * ````
+     *
+     * @return \Closure $callback
+     *
+     * @param array $columnNames
+     * @param array $groups
      */
-    public function aggregate(array $columnIndexes = array())
+    public function aggregate(\Closure $callback, array $columnNames = array(), array $groups = array())
     {
-        $newRowSets = array();
+        $rowSets = array();
+        $groupedTable = TableBuilder::create();
 
-        if (empty($columnIndexes)) {
-            $cells = array();
-            foreach ($this->getColumns() as $column) {
-                $cells[] = new Cell($column->sum());
-            }
-
-            return new Table(array(new Row($cells)));
-        } 
-        foreach ($this->getRows() as $row) {
+        foreach ($this->getRows($groups) as $row) {
             $key = '';
-            foreach ($columnIndexes as $columnIndex) {
-                $key .= $row->getCell($columnIndex)->value();
+            foreach ($columnNames as $columnName) {
+                $key .= $row->getCell($columnName)->value();
             }
 
-            if (!isset($newRowSets[$key])) {
-                $newRowSets[$key] = array($row);
+            $newRow = RowBuilder::create(null, $row->getCells($groups), $row->getGroups());
+            if (!isset($rowSets[$key])) {
+                $rowSets[$key] = TableBuilder::create()->addRow($newRow);
             } else {
-                $newRowSets[$key][] = $row;
+                $rowSets[$key]->addRow($newRow);
             }
         }
 
         $rows = array();
-        foreach ($newRowSets as $newRowSet) {
-            $table = new Table($newRowSet);
-            $aggregateRows = $table->aggregate()->getRows();
-            $rows[] = reset($aggregateRows);
+        foreach ($rowSets as $rowSet) {
+            $rows = $rowSet->getRows();
+            $firstRowBuilder = reset($rows);
+            $callback($rowSet->getTable(), $firstRowBuilder);
+            $groupedTable->addRow($firstRowBuilder);
         }
 
-        return new Table($rows);
+        return $groupedTable->getTable();
     }
 
     public function builder(array $groups = array())
     {
-        return TableBuilder::create($this, $groups);
+        return TableBuilder::create($this->getRows(), $groups);
     }
 
     /**

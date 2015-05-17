@@ -12,7 +12,7 @@
 namespace DTL\DataTable;
 
 /**
- * Represents a table column
+ * Represents a table column.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */

@@ -15,6 +15,7 @@ use DTL\DataTable\Table;
 use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Column;
+use DTL\DataTable\Builder\TableBuilder;
 
 class TableTest extends AggregateableCase
 {
@@ -26,7 +27,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should get columns
+     * It should get columns.
      */
     public function testGetColumn()
     {
@@ -35,7 +36,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return an array representation
+     * It should return an array representation.
      */
     public function testToArray()
     {
@@ -49,57 +50,27 @@ class TableTest extends AggregateableCase
                 new Cell('goodbye'),
             )),
         ));
-                
+
         $expected = array(
             array(
-                4, 
-                2
+                4,
+                2,
             ),
             array(
                 'hello',
-                'goodbye'
-            )
+                'goodbye',
+            ),
         );
 
         $this->assertEquals($expected, $table->toArray());
     }
 
     /**
-     * It should provide a table builder
-     */
-    public function testTableBuilder()
-    {
-        $table = Table::createBuilder()
-            ->row()
-                ->set(0, 'hello', ['group1'])
-                ->set(1, 'goodbye', ['group2'])
-            ->end()
-            ->row()
-                ->set(0, 'bonjour', ['group1'])
-                ->set(1, 'aurevoir', ['group2'])
-            ->end()
-            ->getTable();
-
-        $expectedTable = new Table(array(
-            new Row(array(
-                new Cell('hello', ['group1']),
-                new Cell('goodbye', ['group2']),
-            )),
-            new Row(array(
-                new Cell('bonjour', ['group1']),
-                new Cell('aurevoir', ['group2']),
-            )),
-        ));
-
-        $this->assertEquals($expectedTable, $table);
-    }
-
-    /**
-     * It should produce a new aggregated table based on unique column values
+     * It should aggregate to one row if an empty callback with no column names is given.
      */
     public function testAggregate()
     {
-        $table = Table::createBuilder()
+        $table = TableBuilder::create()
             ->row()
                 ->set(0, 'hello')
                 ->set(1, 12)
@@ -117,19 +88,43 @@ class TableTest extends AggregateableCase
             ->end()
             ->getTable();
 
-        $newTable = $table->aggregate(array(0));
-        $this->assertNotSame($table, $newTable);
-        $this->assertCount(2, $newTable->getRows());
-        $this->assertEquals(24, $newTable->getRow(0)->getCell(1)->value());
-        $this->assertEquals(12, $newTable->getRow(1)->getCell(1)->value());
+        $aggregated = $table->aggregate(function () {});
+        $this->assertCount(1, $aggregated->getRows());
+
+        return $table;
     }
 
     /**
-     * It should return a list of column names
+     * It should aggregate to the unique values of the given columns.
+     *
+     * @depends testAggregate
+     */
+    public function testAggregateColumns($table)
+    {
+        $aggregated = $table->aggregate(function () {}, array(0));
+        $this->assertCount(2, $aggregated->getRows());
+        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->value());
+    }
+
+    /**
+     * It should apply the callback to the aggregate.
+     *
+     * @depends testAggregate
+     */
+    public function testAggregateColumnsCallback($table)
+    {
+        $aggregated = $table->aggregate(function ($table, $row) {
+            $row->set(1, $table->getColumn(1)->sum());
+        }, array(0));
+        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->value());
+    }
+
+    /**
+     * It should return a list of column names.
      */
     public function testGetColumnNames()
     {
-        $table = Table::createBuilder()
+        $table = TableBuilder::create()
             ->row()
                 ->set(0, 'hello', ['one'])
                 ->set(1, 12)
@@ -151,7 +146,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return a list of column names according to group
+     * It should return a list of column names according to group.
      *
      * @depends testGetColumnNames
      */
@@ -161,7 +156,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return all columns
+     * It should return all columns.
      *
      * @depends testGetColumnNames
      */
@@ -173,7 +168,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return all columns
+     * It should return all columns.
      *
      * @depends testGetColumnNames
      */

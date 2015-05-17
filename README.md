@@ -25,7 +25,7 @@ Col 1 | Col 2 | Col 3
 Would be created as follows:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('col1', 12)
         ->set('col2', 14)
@@ -97,7 +97,7 @@ Applying a callback to each cell
 You can apply a callback to each cell on either a `Table` or a `Row`:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('col1', 'foobar')
     ->end()
@@ -116,32 +116,33 @@ Other methods
 Aggregating/grouping table data
 -------------------------------
 
-NOTE: This needs revision
-
 You can aggregate the values in a table based on one or more unique cell
 values in a given column.
 
 ````php
 $table = new Table(
     new Row(array(
-        new Cell('beer'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('beer'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
     new Row(array(
-        new Cell('beer'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('beer'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
     new Row(array(
-        new Cell('snitzel'),
-        new Cell(14),
-        new Cell(4),
+        'category' => new Cell('snitzel'),
+        'quantity' => new Cell(14),
+        'quality'  => new Cell(4),
     )),
 );
 
-$newInstance = $table->aggregate([0]); // aggregate on the zeroeth column
-$newInstance->getRow(0)->getCell(1); // 28 -- the values have been aggregated
+$newInstance = $table->aggregate(function (Table $rowSet, RowBuilder $rowBuilder) {
+    $rowBuilder->set('quantity', $rowSet->sum());
+}, ['category']);
+
+$newInstance->getRow(0)->getCell('quantity'); // 28 -- the values have been aggregated
 ````
 
 Building upon existing tables
@@ -151,7 +152,7 @@ Often you will need to add extra columns or rows to existing tables, for
 example to add a column total. This can be done in two steps:
 
 ````php
-$table = Table::createBuilder()
+$table = TableBuilder::create()
     ->row()
         ->set('price', 10)
     ->end()
