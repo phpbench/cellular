@@ -230,7 +230,7 @@ class Table extends Aggregated
 
     public function builder(array $groups = array())
     {
-        return TableBuilder::create($this->getRows(), $groups);
+        return TableBuilder::create($this->getRows($groups));
     }
 
     /**

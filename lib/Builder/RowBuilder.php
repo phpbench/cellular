@@ -72,6 +72,16 @@ class RowBuilder
     }
 
     /**
+     * Remove the cell in the named column
+     *
+     * @param string $column
+     */
+    public function remove($column)
+    {
+        unset($this->cells[$column]);
+    }
+
+    /**
      * Return the column names.
      *
      * @return array
