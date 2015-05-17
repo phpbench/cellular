@@ -191,3 +191,4 @@ $expected = array(
 
 var_dump($expected === $table->toArray()); // true
 ````
+
