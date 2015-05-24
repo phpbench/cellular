@@ -9,7 +9,7 @@ use DTL\DataTable\Row;
 use DTL\DataTable\Table;
 use PhpBench\Benchmark\Iteration;
 
-class TableBenchmark implements Benchmark
+class TableBench implements Benchmark
 {
     /**
      * @description Create table with plain OOP
