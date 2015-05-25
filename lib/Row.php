@@ -70,7 +70,7 @@ class Row extends Aggregated
     {
         if (!array_key_exists($column, $this->cells)) {
             throw new \OutOfBoundsException(sprintf(
-                'No cell exists at column "%d", known columns: "%s"',
+                'No cell exists at column "%s", known columns: "%s"',
                 $column, implode('", "', array_keys($this->cells))
             ));
         }
