@@ -72,6 +72,17 @@ class RowBuilder
     }
 
     /**
+     * Return the named cell
+     *
+     * @param mixed $column
+     * @return Cell
+     */
+    public function get($column)
+    {
+        return $this->cells[$column];
+    }
+
+    /**
      * Remove the cell in the named column
      *
      * @param string $column
