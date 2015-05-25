@@ -72,20 +72,16 @@ class TableBench implements Benchmark
      */
     public function benchCreateBuilder()
     {
-        TableBuilder::create()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'b')
-                ->set('num', 10)
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'b')
+            ->set('num', 10);
     }
 
     /**
@@ -93,21 +89,16 @@ class TableBench implements Benchmark
      */
     public function benchAggregate()
     {
-        $table = TableBuilder::create()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'b')
-                ->set('num', 10)
-            ->end()
-            ->getTable();
-
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'b')
+            ->set('num', 10);
         $table->aggregate(function ($table, $row) {
             $row->set('num', $table->getColumn('num')->sum());
         });

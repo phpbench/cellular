@@ -107,7 +107,7 @@ $table = TableBuilder::create()
     ->getTable();
 
 $table->map(function (Cell $cell) {
-    $cell->setValue($cell->value() + 1);
+    $cell->setValue($cell->getValue() + 1);
 });
 ````
 
