@@ -65,7 +65,7 @@ abstract class Aggregated implements AggregateableInterface
     {
         $values = array();
         foreach ($this->getCells($groups) as $column => $cell) {
-            $values[$column] = $cell->value();
+            $values[$column] = $cell->getValue();
         }
 
         return $values;

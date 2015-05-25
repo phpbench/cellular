@@ -70,23 +70,19 @@ class TableTest extends AggregateableCase
      */
     public function testAggregate()
     {
-        $table = TableBuilder::create()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-                ->set(2, 'goodbye', array('group1'))
-            ->end()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-                ->set(2, 'goodbye')
-            ->end()
-            ->row()
-                ->set(0, 'goodbye')
-                ->set(1, 12)
-                ->set(2, 'bar')
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set(0, 'hello')
+            ->set(1, 12)
+            ->set(2, 'goodbye', array('group1'));
+        $table->createAndAddRow()
+            ->set(0, 'hello')
+            ->set(1, 12)
+            ->set(2, 'goodbye');
+        $table->createAndAddRow()
+            ->set(0, 'goodbye')
+            ->set(1, 12)
+            ->set(2, 'bar');
 
         $aggregated = $table->aggregate(function () {});
         $this->assertCount(1, $aggregated->getRows());
@@ -103,7 +99,7 @@ class TableTest extends AggregateableCase
     {
         $aggregated = $table->aggregate(function () {}, array(0));
         $this->assertCount(2, $aggregated->getRows());
-        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->value());
+        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->getValue());
     }
 
     /**
@@ -116,7 +112,7 @@ class TableTest extends AggregateableCase
         $aggregated = $table->aggregate(function ($table, $row) {
             $row->set(1, $table->getColumn(1)->sum());
         }, array(0));
-        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->value());
+        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->getValue());
     }
 
     /**
@@ -129,7 +125,7 @@ class TableTest extends AggregateableCase
         $aggregated = $table->aggregate(function ($table, $row) {
             $row->set(1, $table->getColumn(2)->getGroups());
         }, array(0));
-        $this->assertEquals(array('group1'), $aggregated->getRow(0)->getCell(1)->value());
+        $this->assertEquals(array('group1'), $aggregated->getRow(0)->getCell(1)->getValue());
     }
 
     /**
@@ -137,20 +133,16 @@ class TableTest extends AggregateableCase
      */
     public function testGetColumnNames()
     {
-        $table = TableBuilder::create()
-            ->row()
-                ->set(0, 'hello', ['one'])
-                ->set(1, 12)
-            ->end()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-            ->end()
-            ->row()
-                ->set(0, 'goodbye', ['one'])
-                ->set(1, 12)
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set(0, 'hello', ['one'])
+            ->set(1, 12);
+        $table->createAndAddRow()
+            ->set(0, 'hello')
+            ->set(1, 12);
+        $table->createAndAddRow()
+            ->set(0, 'goodbye', ['one'])
+            ->set(1, 12);
 
         $columnNames = $table->getColumnNames();
         $this->assertEquals(array(0, 1), $columnNames);

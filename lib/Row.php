@@ -50,6 +50,7 @@ class Row extends Aggregated
     /**
      * Return all column names.
      *
+     * @param array $groups
      * @return array
      */
     public function getColumnNames(array $groups = array())
@@ -61,9 +62,7 @@ class Row extends Aggregated
      * Return the cell at the given column.
      *
      * @param int $column
-     *
      * @throws \OutOfBoundsException
-     *
      * @return Cell
      */
     public function getCell($column)
@@ -76,6 +75,31 @@ class Row extends Aggregated
         }
 
         return $this->cells[$column];
+    }
+
+    /**
+     * Set or create a cell by values
+     *
+     * @param string $columnName
+     * @param mixed $value
+     * @param array $groups
+     */
+    public function set($columnName, $value, array $groups = array())
+    {
+        if (!isset($this->cells[$columnName])) {
+            $this->cells[$columnName] = new Cell($value, $groups);
+        } else {
+            $this->cells[$columnName]->setValue($value);
+        }
+
+        return $this;
+    }
+
+    public function remove($columnName)
+    {
+        unset($this->cells[$columnName]);
+
+        return $this;
     }
 
     /**
@@ -99,10 +123,19 @@ class Row extends Aggregated
     }
 
     /**
+     * Set the cells
+     *
+     * @param Cell[]
+     */
+    public function setCells(array $cells)
+    {
+        $this->cells = $cells;
+    }
+
+    /**
      * Return an array representation of this row.
      *
      * @param array $groups
-     *
      * @return array
      */
     public function toArray(array $groups = array())

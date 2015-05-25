@@ -14,78 +14,49 @@ namespace DTL\DataTable;
 use DTL\DataTable\Builder\TableBuilder;
 use DTL\DataTable\Builder\RowBuilder;
 use DTL\DataTable\Table;
-use DTL\DataTable\Row;
 
 /**
- * Represents a table.
+ * Represents a collection of Tables
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Table extends Aggregated
+class Report extends Aggregated
 {
     /**
-     * @var Row[]
+     * @var Table[]
      */
-    private $rows;
+    private $tables;
 
     /**
-     * @param array $rows
+     * @param array $tables
      */
-    public function __construct(array $rows = array())
+    public function __construct(array $tables = array())
     {
-        $this->rows = $rows;
-    }
-
-    public static function create()
-    {
-        return new self();
+        $this->tables = $tables;
     }
 
     /**
-     * Return all the rows.
+     * Return all the tables.
      *
      * @return Row[]
      */
     public function getRows(array $groups = array())
     {
         if (empty($groups)) {
-            return $this->rows;
+            return $this->tables;
         }
 
-        $rows = array();
+        $tables = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this->tables as $row) {
             foreach ($groups as $group) {
                 if (in_array($group, $row->getGroups())) {
-                    $rows[] = $row;
+                    $tables[] = $row;
                 }
             }
         }
 
-        return $rows;
-    }
-
-    /**
-     * Add a row to the table.
-     *
-     * @param Row $row
-     */
-    public function addRow(Row $row)
-    {
-        $this->rows[] = $row;
-    }
-
-
-    public function createRow(array $cells = array(), array $groups = array())
-    {
-        return new Row($cells, $groups);
-    }
-
-    public function createAndAddRow(array $cells = array(), array $groups = array())
-    {
-        $row = $this->createRow($cells, $groups);
-        $this->addRow($row);
-        return $row;
+        return $tables;
     }
 
     /**
@@ -107,7 +78,7 @@ class Table extends Aggregated
     {
         $columnNames = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this->tables as $row) {
             foreach ($row->getColumnNames($groups) as $columnName) {
                 $columnNames[$columnName] = $columnName;
             }
@@ -142,7 +113,7 @@ class Table extends Aggregated
     public function getColumnCount(array $groups = array())
     {
         $min = null;
-        foreach ($this->rows as $row) {
+        foreach ($this->tables as $row) {
             $cellCount = count($row->getCells($groups));
             if ($min === null || $cellCount < $min) {
                 $min = $cellCount;
@@ -157,20 +128,20 @@ class Table extends Aggregated
      *
      * @param int $index
      *
-     * @throws \OutOfRangeException
+     * @thtables \OutOfRangeException
      *
      * @return Row
      */
     public function getRow($index)
     {
-        if (!isset($this->rows[$index])) {
+        if (!isset($this->tables[$index])) {
             throw new \OutOfRangeException(sprintf(
                 'Row with index "%s" does not exist. Must be >=0 < %d',
-                $index, count($this->rows)
+                $index, count($this->tables)
             ));
         }
 
-        return $this->rows[$index];
+        return $this->tables[$index];
     }
 
     /**
@@ -179,7 +150,7 @@ class Table extends Aggregated
     public function getCells(array $groups = array())
     {
         $cells = array();
-        foreach ($this->rows as $row) {
+        foreach ($this->tables as $row) {
             foreach ($row->getCells($groups) as $cell) {
                 $cells[] = $cell;
             }
@@ -198,7 +169,7 @@ class Table extends Aggregated
     public function toArray(array $groups = array())
     {
         $result = array();
-        foreach ($this->rows as $row) {
+        foreach ($this->tables as $row) {
             $result[] = $row->toArray($groups);
         }
 
@@ -206,7 +177,7 @@ class Table extends Aggregated
     }
 
     /**
-     * Return a new table instance with only the rows which
+     * Return a new table instance with only the tables which
      * contain unique column names according to $columnNames.
      *
      * The callback accepts, for each set of unique $columnNames, a
@@ -231,30 +202,35 @@ class Table extends Aggregated
     public function aggregate(\Closure $callback, array $columnNames = array(), array $groups = array())
     {
         $rowSets = array();
-        $aggregatedTable = self::create();
+        $groupedTable = TableBuilder::create();
 
-        $rows = $this->getRows($groups);
-        foreach ($rows as $row) {
+        foreach ($this->getRows($groups) as $row) {
             $key = '';
             foreach ($columnNames as $columnName) {
-                $key .= $row->getCell($columnName)->getValue();
+                $key .= $row->getCell($columnName)->value();
             }
 
+            $newRow = RowBuilder::create(null, $row->getCells($groups), $row->getGroups());
             if (!isset($rowSets[$key])) {
-                $rowSets[$key] = Table::create();
+                $rowSets[$key] = TableBuilder::create()->addRow($newRow);
+            } else {
+                $rowSets[$key]->addRow($newRow);
             }
-
-            $rowSets[$key]->createAndAddRow($row->getCells($groups), $row->getGroups());
         }
 
         foreach ($rowSets as $rowSet) {
-            $rows = $rowSet->getRows();
-            $firstRow = reset($rows);
-            $callback($rowSet, $firstRow);
-            $aggregatedTable->addRow($firstRow);
+            $tables = $rowSet->getRows();
+            $firstRowBuilder = reset($tables);
+            $callback($rowSet->getTable(), $firstRowBuilder);
+            $groupedTable->addRow($firstRowBuilder);
         }
 
-        return $aggregatedTable;
+        return $groupedTable->getTable();
+    }
+
+    public function builder(array $groups = array())
+    {
+        return TableBuilder::create($this->getRows($groups));
     }
 
     /**

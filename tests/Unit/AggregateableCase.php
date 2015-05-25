@@ -101,7 +101,7 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
         $expected = array(2, 14, 2, 6, 9, 4, 3);
         $aggregate = $this->getAggregate();
         $aggregate->map(function (Cell $cell) {
-            return $cell->value() + 1;
+            return $cell->getValue() + 1;
         });
         $this->assertEquals($expected, array_values($aggregate->values(['x'])));
     }
