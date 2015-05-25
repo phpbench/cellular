@@ -27,10 +27,10 @@ class RowTest extends AggregateableCase
     public function testGetCell()
     {
         $cell = $this->getAggregate()->getCell(0);
-        $this->assertEquals('text', $cell->value());
+        $this->assertEquals('text', $cell->getValue());
 
         $cell = $this->getAggregate()->getCell(4);
-        $this->assertEquals(5, $cell->value());
+        $this->assertEquals(5, $cell->getValue());
     }
 
     /**
@@ -70,7 +70,7 @@ class RowTest extends AggregateableCase
         ));
 
         $row->fill('hai');
-        $this->assertEquals('hai', $row->getCell('hello')->value());
-        $this->assertEquals('hai', $row->getCell(2)->value());
+        $this->assertEquals('hai', $row->getCell('hello')->getValue());
+        $this->assertEquals('hai', $row->getCell(2)->getValue());
     }
 }

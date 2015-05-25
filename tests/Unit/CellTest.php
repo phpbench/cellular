@@ -30,7 +30,7 @@ class CellTest extends \PHPUnit_Framework_TestCase
     public function testGetSetValue()
     {
         $cell = new Cell('test');
-        $this->assertEquals('test', $cell->value());
+        $this->assertEquals('test', $cell->getValue());
     }
 
     /**
@@ -40,7 +40,7 @@ class CellTest extends \PHPUnit_Framework_TestCase
     {
         $cell = new Cell('test');
         foreach (array(
-            'value', 'sum', 'min', 'max', 'avg', 'median',
+            'getValue', 'sum', 'min', 'max', 'avg', 'median',
         ) as $method) {
             $this->assertEquals('test', $cell->$method());
         }

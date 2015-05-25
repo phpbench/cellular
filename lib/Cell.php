@@ -61,7 +61,7 @@ class Cell implements AggregateableInterface
      *
      * @return mixed
      */
-    public function value()
+    public function getValue()
     {
         return $this->value;
     }
