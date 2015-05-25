@@ -9,14 +9,42 @@ use DTL\DataTable\Row;
 use DTL\DataTable\Table;
 use PhpBench\Benchmark\Iteration;
 
+/**
+ * @revs 10
+ * @revs 100
+ * @revs 1000
+ * @revs 10000
+ * @iterations 4
+ * @processIsolation iteration
+ */
 class TableBench implements Benchmark
 {
     /**
      * @description Create table with plain OOP
-     * @beforeMethod benchCreateTable
-     * @iterations 1000
      */
     public function benchCreateTable()
+    {
+        new Table(array(
+            new Row(array(
+                'key' => new Cell('a'),
+                'num' => new Cell(10),
+                'rand' => new Cell(rand(0, 100000)),
+            )),
+            new Row(array(
+                'key' => new Cell('a'),
+                'num' => new Cell(10),
+            )),
+            new Row(array(
+                'key' => new Cell('b'),
+                'num' => new Cell(10),
+            )),
+        ));
+    }
+
+    /**
+     * @description Create table with plain OOP and aggregate it
+     */
+    public function benchAggregatePlainPhp()
     {
         $table = new Table(array(
             new Row(array(
@@ -33,13 +61,14 @@ class TableBench implements Benchmark
                 'num' => new Cell(10),
             )),
         ));
-        unset($table);
+
+        $table->aggregate(function ($table, $row) {
+            $row->set('num', $table->getColumn('num')->sum());
+        });
     }
 
     /**
      * @description Create table with the builder
-     * @beforeMethod benchCreateBuilder
-     * @iterations 1000
      */
     public function benchCreateBuilder()
     {
@@ -61,7 +90,6 @@ class TableBench implements Benchmark
 
     /**
      * @description Create table and aggregate it
-     * @iterations 1000
      */
     public function benchAggregate()
     {
