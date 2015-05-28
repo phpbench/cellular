@@ -18,6 +18,12 @@ class Partition
 
     public function get($offset)
     {
+        if (!isset($this->elements[$offset])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Offset "%s" does not exist. Known offsets: "%s"',
+                $offset, implode('", "', array_keys($this->elements))
+            ));
+        }
         return $this->elements[$offset];
     }
 
@@ -28,9 +34,6 @@ class Partition
 
     public function add($value)
     {
-        if (null === $value) {
-        throw new \Exception('asd');
-        }
         $this->elements[] = $value;
     }
 
@@ -81,5 +84,12 @@ class Partition
         }
 
         return $value;
+    }
+
+    public function __clone()
+    {
+        foreach ($this->elements as $index => $element) {
+            $this->elements[$index] = clone $element;
+        }
     }
 }

@@ -52,6 +52,16 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
+     * Replace the current partitions with a single partition
+     * 
+     * @param Partition
+     */
+    protected function replacePartition(Partition $partition)
+    {
+        $this->partitions = array($partition);
+    }
+
+    /**
      * Return all partitions
      *
      * @return Partition[]
@@ -208,6 +218,11 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
         }
     }
 
+    public function clear()
+    {
+        $this->partitions = array(new Partition(array()));
+    }
+
     /**
      * Return a new instance of this collection with only the elements from this
      * instance which satisft the given filter.
@@ -289,6 +304,21 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
         $this->assertSinglePartition(__METHOD__);
 
         return $this->getPrimaryPartition()->remove($offset);
+    }
+
+    public function __clone()
+    {
+        foreach ($this->partitions as $index => $partition) {
+            $this->partitions[$index] = clone $partition;
+        }
+    }
+
+    /**
+     * Duplicate (clone) the table
+     */
+    public function duplicate()
+    {
+        return clone $this;
     }
 
     /**

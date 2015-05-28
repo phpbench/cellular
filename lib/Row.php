@@ -142,4 +142,17 @@ class Row extends Aggregated
 
         return $result;
     }
+
+    public function order(array $columnNames = array())
+    {
+        $this->assertSinglePartition(__METHOD__);
+
+        $newOrder = array();
+
+        foreach ($columnNames as $columnName) {
+            $newOrder[$columnName] = isset($this[$columnName]) ? $this[$columnName] : new Cell(null);
+        }
+
+        $this->replacePartition(new Partition($newOrder));
+    }
 }

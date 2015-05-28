@@ -202,4 +202,13 @@ class Table extends Aggregated
     {
         return array();
     }
+
+    public function align()
+    {
+        $columnNames = $this->getColumnNames();
+
+        foreach ($this as $row) {
+            $row->order($columnNames);
+        }
+    }
 }

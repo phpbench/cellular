@@ -77,7 +77,8 @@ abstract class Aggregated extends Collection implements AggregateableInterface
     public function mapValues(\Closure $closure, array $groups = array())
     {
         foreach ($this->getCells($groups) as $cell) {
-            $cell->setValue($closure($cell));
+            $value = $closure($cell);
+            $cell->setValue($value);
         }
     }
 
