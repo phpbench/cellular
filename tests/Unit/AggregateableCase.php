@@ -96,13 +96,13 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
     /**
      * It should apply a closure to each cell.
      */
-    public function testMap()
+    public function testMapValues()
     {
         $expected = array(2, 14, 2, 6, 9, 4, 3);
         $aggregate = $this->getAggregate();
-        $aggregate->map(function (Cell $cell) {
+        $aggregate->mapValues(function (Cell $cell) {
             return $cell->getValue() + 1;
-        });
+        }, ['x']);
         $this->assertEquals($expected, array_values($aggregate->values(['x'])));
     }
 

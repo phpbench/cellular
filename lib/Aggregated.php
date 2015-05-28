@@ -16,7 +16,7 @@ namespace DTL\DataTable;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-abstract class Aggregated implements AggregateableInterface
+abstract class Aggregated extends Collection implements AggregateableInterface
 {
     /**
      * {@inheritDoc}
@@ -74,6 +74,16 @@ abstract class Aggregated implements AggregateableInterface
     /**
      * {@inheritDoc}
      */
+    public function mapValues(\Closure $closure, array $groups = array())
+    {
+        foreach ($this->getCells($groups) as $cell) {
+            $cell->setValue($closure($cell));
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function fill($value, array $groups = array())
     {
         foreach ($this->getCells($groups) as $cell) {
@@ -81,17 +91,5 @@ abstract class Aggregated implements AggregateableInterface
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function map(\Closure $closure, array $groups = array())
-    {
-        foreach ($this->getCells($groups) as $cell) {
-            $cell->setValue($closure($cell));
-        }
-    }
-
     abstract public function getCells(array $groups = array());
-
-    abstract public function toArray(array $groups = array());
 }

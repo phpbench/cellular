@@ -50,12 +50,12 @@ class RowTest extends AggregateableCase
     {
         $row = new Row(array(
             'hello' => new Cell('goodbye'),
-            2 => new Cell('hello'),
+            0 => new Cell('hello'),
         ));
 
         $this->assertEquals(array(
             'hello' => 'goodbye',
-            2 => 'hello',
+            0 => 'hello',
         ), $row->toArray());
     }
 

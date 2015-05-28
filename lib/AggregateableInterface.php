@@ -87,12 +87,4 @@ interface AggregateableInterface
      * @param array $groups
      */
     public function fill($value, array $groups = array());
-
-    /**
-     * Apply a closure to each cell.
-     *
-     * @param \Closure $closure
-     * @param array $groups
-     */
-    public function map(\Closure $closure, array $groups = array());
 }

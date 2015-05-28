@@ -23,22 +23,9 @@ use DTL\DataTable\Row;
  */
 class Table extends Aggregated
 {
-    /**
-     * @var Row[]
-     */
-    private $rows;
-
-    /**
-     * @param array $rows
-     */
-    public function __construct(array $rows = array())
+    protected function validateElement($element)
     {
-        $this->rows = $rows;
-    }
-
-    public static function create()
-    {
-        return new self();
+        return $element instanceof Row;
     }
 
     /**
@@ -49,12 +36,12 @@ class Table extends Aggregated
     public function getRows(array $groups = array())
     {
         if (empty($groups)) {
-            return $this->rows;
+            return $this->getElements();
         }
 
         $rows = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             foreach ($groups as $group) {
                 if (in_array($group, $row->getGroups())) {
                     $rows[] = $row;
@@ -72,13 +59,16 @@ class Table extends Aggregated
      */
     public function addRow(Row $row)
     {
-        $this->rows[] = $row;
+        $this[] = $row;
     }
 
 
     public function createRow(array $cells = array(), array $groups = array())
     {
-        return new Row($cells, $groups);
+        $row = new Row($cells);
+        $row->setGroups($groups);
+
+        return $row;
     }
 
     public function createAndAddRow(array $cells = array(), array $groups = array())
@@ -107,7 +97,7 @@ class Table extends Aggregated
     {
         $columnNames = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this->getElements() as $row) {
             foreach ($row->getColumnNames($groups) as $columnName) {
                 $columnNames[$columnName] = $columnName;
             }
@@ -142,7 +132,7 @@ class Table extends Aggregated
     public function getColumnCount(array $groups = array())
     {
         $min = null;
-        foreach ($this->rows as $row) {
+        foreach ($this->getElements() as $row) {
             $cellCount = count($row->getCells($groups));
             if ($min === null || $cellCount < $min) {
                 $min = $cellCount;
@@ -163,14 +153,14 @@ class Table extends Aggregated
      */
     public function getRow($index)
     {
-        if (!isset($this->rows[$index])) {
+        if (!isset($this->getElements()[$index])) {
             throw new \OutOfRangeException(sprintf(
                 'Row with index "%s" does not exist. Must be >=0 < %d',
-                $index, count($this->rows)
+                $index, count($this->getElements())
             ));
         }
 
-        return $this->rows[$index];
+        return $this[$index];
     }
 
     /**
@@ -179,7 +169,7 @@ class Table extends Aggregated
     public function getCells(array $groups = array())
     {
         $cells = array();
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             foreach ($row->getCells($groups) as $cell) {
                 $cells[] = $cell;
             }
@@ -198,63 +188,11 @@ class Table extends Aggregated
     public function toArray(array $groups = array())
     {
         $result = array();
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             $result[] = $row->toArray($groups);
         }
 
         return $result;
-    }
-
-    /**
-     * Return a new table instance with only the rows which
-     * contain unique column names according to $columnNames.
-     *
-     * The callback accepts, for each set of unique $columnNames, a
-     * Table with the unique set and the Row instance which will represent
-     * that set in the final Table instance.
-     *
-     * For example:
-     *
-     * ````
-     * $aggregatedTable = $table->aggregate(
-     *     function (Table $rowSet, Row $newRow) {
-     *         $newRow->set('foo', $rowSet->getColumn('foo')->sum());
-     *     }.
-     *     array('col1', 'col2'),
-     * );
-     * ````
-     *
-     * @param array $columnNames
-     * @param array $groups
-     * @return Table $callback
-     */
-    public function aggregate(\Closure $callback, array $columnNames = array(), array $groups = array())
-    {
-        $rowSets = array();
-        $aggregatedTable = self::create();
-
-        $rows = $this->getRows($groups);
-        foreach ($rows as $row) {
-            $key = '';
-            foreach ($columnNames as $columnName) {
-                $key .= $row->getCell($columnName)->getValue();
-            }
-
-            if (!isset($rowSets[$key])) {
-                $rowSets[$key] = Table::create();
-            }
-
-            $rowSets[$key]->createAndAddRow($row->getCells($groups), $row->getGroups());
-        }
-
-        foreach ($rowSets as $rowSet) {
-            $rows = $rowSet->getRows();
-            $firstRow = reset($rows);
-            $callback($rowSet, $firstRow);
-            $aggregatedTable->addRow($firstRow);
-        }
-
-        return $aggregatedTable;
     }
 
     /**

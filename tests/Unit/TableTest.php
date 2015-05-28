@@ -66,83 +66,20 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should aggregate to one row if an empty callback with no column names is given.
-     */
-    public function testAggregate()
-    {
-        $table = Table::create();
-        $table->createAndAddRow()
-            ->set(0, 'hello')
-            ->set(1, 12)
-            ->set(2, 'goodbye', array('group1'));
-        $table->createAndAddRow()
-            ->set(0, 'hello')
-            ->set(1, 12)
-            ->set(2, 'goodbye');
-        $table->createAndAddRow()
-            ->set(0, 'goodbye')
-            ->set(1, 12)
-            ->set(2, 'bar');
-
-        $aggregated = $table->aggregate(function () {});
-        $this->assertCount(1, $aggregated->getRows());
-
-        return $table;
-    }
-
-    /**
-     * It should aggregate to the unique values of the given columns.
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateColumns($table)
-    {
-        $aggregated = $table->aggregate(function () {}, array(0));
-        $this->assertCount(2, $aggregated->getRows());
-        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->getValue());
-    }
-
-    /**
-     * It should apply the callback to the aggregate.
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateColumnsCallback($table)
-    {
-        $aggregated = $table->aggregate(function ($table, $row) {
-            $row->set(1, $table->getColumn(1)->sum());
-        }, array(0));
-        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->getValue());
-    }
-
-    /**
-     * Its should preserve groups when aggregatating
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateWithGroups($table)
-    {
-        $aggregated = $table->aggregate(function ($table, $row) {
-            $row->set(1, $table->getColumn(2)->getGroups());
-        }, array(0));
-        $this->assertEquals(array('group1'), $aggregated->getRow(0)->getCell(1)->getValue());
-    }
-
-    /**
      * It should return a list of column names.
      */
     public function testGetColumnNames()
     {
         $table = Table::create();
         $table->createAndAddRow()
-            ->set(0, 'hello', ['one'])
-            ->set(1, 12);
+            ->setCell(0, 'hello', ['one'])
+            ->setCell(1, 12);
         $table->createAndAddRow()
-            ->set(0, 'hello')
-            ->set(1, 12);
+            ->setCell(0, 'hello')
+            ->setCell(1, 12);
         $table->createAndAddRow()
-            ->set(0, 'goodbye', ['one'])
-            ->set(1, 12);
+            ->setCell(0, 'goodbye', ['one'])
+            ->setCell(1, 12);
 
         $columnNames = $table->getColumnNames();
         $this->assertEquals(array(0, 1), $columnNames);

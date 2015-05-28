@@ -21,23 +21,9 @@ use DTL\DataTable\Cell;
 class Row extends Aggregated
 {
     /**
-     * @var Row[]
-     */
-    private $cells;
-
-    /**
      * @var string[]
      */
     private $groups;
-
-    /**
-     * @param array $cells
-     */
-    public function __construct(array $cells = array(), array $groups = array())
-    {
-        $this->cells = $cells;
-        $this->groups = $groups;
-    }
 
     /**
      * {@inheritDoc}
@@ -45,6 +31,13 @@ class Row extends Aggregated
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    public function setGroups($groups)
+    {
+        $this->groups = $groups;
+
+        return $this;
     }
 
     /**
@@ -67,39 +60,51 @@ class Row extends Aggregated
      */
     public function getCell($column)
     {
-        if (!array_key_exists($column, $this->cells)) {
+        if (!array_key_exists($column, $this->getElements())) {
             throw new \OutOfBoundsException(sprintf(
                 'No cell exists at column "%s", known columns: "%s"',
-                $column, implode('", "', array_keys($this->cells))
+                $column, implode('", "', array_keys($this->getElements()))
             ));
         }
 
-        return $this->cells[$column];
+        return $this->getElements()[$column];
     }
 
     /**
-     * Set or create a cell by values
+     * Set or create a cell
      *
      * @param string $columnName
      * @param mixed $value
      * @param array $groups
+     * @return this
      */
-    public function set($columnName, $value, array $groups = array())
+    public function setCell($columnName, $value, array $groups = array())
     {
-        if (!isset($this->cells[$columnName])) {
-            $this->cells[$columnName] = new Cell($value, $groups);
+        if ($this->getPrimaryPartition()->exists($columnName)) {
+            $this->getPrimaryPartition()->get($columnName)->setValue($value);
         } else {
-            $this->cells[$columnName]->setValue($value);
+            $this->getPrimaryPartition()->set($columnName, new Cell($value, $groups));
         }
 
         return $this;
     }
 
+    /**
+     * Synonym for setCell
+     *
+     * @param string $columnName
+     * @param mixed $value
+     * @param array $groups
+     * @return this
+     */
+    public function set($columnName, $value, array $groups = array())
+    {
+        return $this->setCell($columnName, $value, $groups);
+    }
+
     public function remove($columnName)
     {
-        unset($this->cells[$columnName]);
-
-        return $this;
+        unset($this[$columnName]);
     }
 
     /**
@@ -108,10 +113,10 @@ class Row extends Aggregated
     public function getCells(array $groups = array())
     {
         if (empty($groups)) {
-            return $this->cells;
+            return $this->getElements();
         }
 
-        return array_filter($this->cells, function (Cell $cell) use ($groups) {
+        return $this->filter(function (Cell $cell) use ($groups) {
             foreach ($groups as $group) {
                 if (in_array($group, $cell->getGroups())) {
                     return true;
@@ -119,17 +124,7 @@ class Row extends Aggregated
             }
 
             return false;
-        });
-    }
-
-    /**
-     * Set the cells
-     *
-     * @param Cell[]
-     */
-    public function setCells(array $cells)
-    {
-        $this->cells = $cells;
+        })->getElements();
     }
 
     /**

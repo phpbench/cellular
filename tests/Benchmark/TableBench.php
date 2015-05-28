@@ -62,7 +62,10 @@ class TableBench implements Benchmark
             )),
         ));
 
-        $table->aggregate(function ($table, $row) {
+        $table->partition(function ($row) {
+            return $row['num'];
+        })->fork(function ($table, $newTable) {
+            $row = $newTable->createAndAddRow();
             $row->set('num', $table->getColumn('num')->sum());
         });
     }
@@ -99,7 +102,11 @@ class TableBench implements Benchmark
         $table->createAndAddRow()
             ->set('key', 'b')
             ->set('num', 10);
-        $table->aggregate(function ($table, $row) {
+
+        $table->partition(function ($row) {
+            return $row['num'];
+        })->fork(function ($table, $newTable) {
+            $row = $newTable->createAndAddRow();
             $row->set('num', $table->getColumn('num')->sum());
         });
     }
