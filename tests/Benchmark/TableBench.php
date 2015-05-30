@@ -1,9 +1,17 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Tests\Benchmark;
 
 use PhpBench\Benchmark;
-use DTL\DataTable\Builder\TableBuilder;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Row;
 use DTL\DataTable\Table;

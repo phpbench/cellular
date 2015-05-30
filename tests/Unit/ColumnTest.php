@@ -6,7 +6,9 @@
  * (c) Daniel Leech <daniel@dantleech.com>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.  */ 
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Table;
@@ -66,7 +68,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Its hould return cells
+     * Its hould return cells.
      */
     public function testGetCells()
     {
@@ -85,7 +87,7 @@ class ColumnTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return an array
+     * It should return an array.
      */
     public function testToArray()
     {

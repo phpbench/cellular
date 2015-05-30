@@ -22,7 +22,7 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * It should only accept elements of type Cell
+     * It should only accept elements of type Cell.
      *
      * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
      */
@@ -70,7 +70,7 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * It should set the value of an existing cell
+     * It should set the value of an existing cell.
      */
     public function testSetExisting()
     {
@@ -83,7 +83,7 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * It should create a new cell if a non-existing column name is specified in "set"
+     * It should create a new cell if a non-existing column name is specified in "set".
      */
     public function testSetNonExisting()
     {

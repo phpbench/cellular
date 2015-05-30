@@ -11,10 +11,6 @@
 
 namespace DTL\DataTable;
 
-use DTL\DataTable\Builder\TableBuilder;
-use DTL\DataTable\Builder\RowBuilder;
-use DTL\DataTable\Table;
-use DTL\DataTable\Row;
 use DTL\DataTable\Exception\InvalidCollectionTypeException;
 
 /**
@@ -68,11 +64,11 @@ class Table extends Cellular
         $this[] = $row;
     }
 
-
     /**
      * Reurn a new row with the given groups.
      *
      * @param string[] $groups
+     *
      * @return Row
      */
     public function createRow(array $groups = array())
@@ -87,12 +83,14 @@ class Table extends Cellular
      * Create a new row, add it to this table then return it.
      *
      * @param string[] $groups
+     *
      * @return Row
      */
     public function createAndAddRow(array $groups = array())
     {
         $row = $this->createRow($groups);
         $this->addRow($row);
+
         return $row;
     }
 

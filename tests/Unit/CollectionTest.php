@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Collection;
@@ -14,7 +23,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should act as an array
+     * It should act as an array.
      */
     public function testArrayAccess()
     {
@@ -25,7 +34,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should allow addition to an array
+     * It should allow addition to an array.
      */
     public function testArrayAddition()
     {
@@ -36,7 +45,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be countable
+     * It should be countable.
      */
     public function testCount()
     {
@@ -46,7 +55,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be iteratable
+     * It should be iteratable.
      */
     public function testIterator()
     {
@@ -55,15 +64,15 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         foreach ($this->collection as $key => $value) {
             $this->assertEquals('foo', $key);
             $this->assertEquals('bar', $value);
+
             return;
         }
 
         $this->fail('Did not iterate');
     }
 
-
     /**
-     * Its should sort its elements
+     * Its should sort its elements.
      */
     public function testSort()
     {
@@ -79,7 +88,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should partition its elements
+     * It should partition its elements.
      */
     public function testPartition()
     {
@@ -108,11 +117,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ),
             array_values($partitions[1]->getElements())
         );
-
     }
 
     /**
-     * It flow partitions into a new instance
+     * It flow partitions into a new instance.
      */
     public function testFork()
     {
@@ -122,12 +130,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertEquals(array(
-            'one', 'four'
+            'one', 'four',
         ), $newInstance->getElements());
     }
 
     /**
-     * It should apply a closure to each element
+     * It should apply a closure to each element.
      */
     public function testApply()
     {
@@ -143,7 +151,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should map a closure to each element
+     * It should map a closure to each element.
      */
     public function testMap()
     {
@@ -159,7 +167,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should evaluate a closure on each element
+     * It should evaluate a closure on each element.
      */
     public function testEvaluate()
     {
@@ -172,7 +180,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should be able to do some pretty cool stuff
+     * It should be able to do some pretty cool stuff.
      */
     public function testCoolStuff()
     {
@@ -203,7 +211,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should filter
+     * It should filter.
      */
     public function testFilter()
     {
@@ -228,7 +236,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It will not allow array access on a table with multiple partitions
+     * It will not allow array access on a table with multiple partitions.
      *
      * @expectedException RuntimeException
      */
@@ -239,7 +247,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It will not allow array access on a table with multiple partitions
+     * It will not allow array access on a table with multiple partitions.
      *
      * @expectedException RuntimeException
      */
@@ -250,7 +258,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It will not allow array access on a table with multiple partitions
+     * It will not allow array access on a table with multiple partitions.
      *
      * @expectedException RuntimeException
      */
@@ -261,7 +269,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It will not allow array access on a table with multiple partitions
+     * It will not allow array access on a table with multiple partitions.
      *
      * @expectedException RuntimeException
      */
@@ -272,7 +280,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should clear
+     * It should clear.
      */
     public function testClear()
     {
@@ -283,7 +291,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should duplicate itself
+     * It should duplicate itself.
      */
     public function testDuplicate()
     {
@@ -294,12 +302,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should duplicate with objects in the collection
+     * It should duplicate with objects in the collection.
      */
     public function testDuplicateWithObject()
     {
-        $object1 = new \stdClass;
-        $object2 = new \stdClass;
+        $object1 = new \stdClass();
+        $object2 = new \stdClass();
 
         $collection = new Collection(array($object1, $object2));
         $duplicate = $collection->duplicate();

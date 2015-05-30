@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable;
 
 /**
@@ -25,7 +34,7 @@ class Partition
     }
 
     /**
-     * Return the frist element
+     * Return the frist element.
      *
      * @return mixed
      */
@@ -35,7 +44,7 @@ class Partition
     }
 
     /**
-     * Return the element at the given offset
+     * Return the element at the given offset.
      *
      * @return mixed
      */
@@ -47,11 +56,12 @@ class Partition
                 $offset, implode('", "', array_keys($this->elements))
             ));
         }
+
         return $this->elements[$offset];
     }
 
     /**
-     * Set the value at the given offset
+     * Set the value at the given offset.
      *
      * @param string $offset
      * @param mixed $value
@@ -62,7 +72,7 @@ class Partition
     }
 
     /**
-     * Add a new value to the partition
+     * Add a new value to the partition.
      *
      * @param mixed $value
      */
@@ -75,7 +85,8 @@ class Partition
      * Return true if the offset exists, otherwise false.
      *
      * @param mixed $offset
-     * @return boolean
+     *
+     * @return bool
      */
     public function exists($offset)
     {
@@ -83,7 +94,7 @@ class Partition
     }
 
     /**
-     * Remove the element at the given offset
+     * Remove the element at the given offset.
      *
      * @param mixed $offset
      */
@@ -93,9 +104,9 @@ class Partition
     }
 
     /**
-     * Return the number of elements in the partition
+     * Return the number of elements in the partition.
      *
-     * @return integer
+     * @return int
      */
     public function count()
     {
@@ -103,7 +114,7 @@ class Partition
     }
 
     /**
-     * Return the elements in the partition
+     * Return the elements in the partition.
      *
      * @return mixed[]
      */
@@ -123,7 +134,7 @@ class Partition
     }
 
     /**
-     * Apply a closure to each element
+     * Apply a closure to each element.
      *
      * @param \Closure $closure
      */

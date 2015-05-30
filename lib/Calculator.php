@@ -12,7 +12,7 @@
 namespace DTL\DataTable;
 
 /**
- * Calculator
+ * Calculator.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */

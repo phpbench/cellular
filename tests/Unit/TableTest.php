@@ -15,7 +15,6 @@ use DTL\DataTable\Table;
 use DTL\DataTable\Row;
 use DTL\DataTable\Cell;
 use DTL\DataTable\Column;
-use DTL\DataTable\Builder\TableBuilder;
 
 class TableTest extends AggregateableCase
 {
@@ -27,7 +26,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should only accept elements of type Row
+     * It should only accept elements of type Row.
      *
      * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
      */
@@ -131,7 +130,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return a row by index
+     * It should return a row by index.
      */
     public function testGetRow()
     {
@@ -143,7 +142,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return a rows by groups
+     * It should return a rows by groups.
      */
     public function testGetRowByGroups()
     {
@@ -154,7 +153,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should return its groups (tables never have any groups at the moment)
+     * It should return its groups (tables never have any groups at the moment).
      */
     public function testGetGroups()
     {

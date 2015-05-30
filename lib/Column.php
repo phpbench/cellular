@@ -58,7 +58,6 @@ class Column extends Cellular
             $cells[] = $cell;
         }
 
-
         return $cells;
     }
 

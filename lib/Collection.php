@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\DataTable;
 
 /**
@@ -15,7 +24,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     private $partitions = array();
 
     /**
-     * Create a new collection
+     * Create a new collection.
      *
      * @param mixed[] $elements
      *
@@ -45,7 +54,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Ensure that partitions are cloned when this collection is cloned
+     * Ensure that partitions are cloned when this collection is cloned.
      */
     public function __clone()
     {
@@ -55,7 +64,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return the primary partition
+     * Return the primary partition.
      *
      * NOTE: There should always be a primary partition.
      *
@@ -67,7 +76,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return all partitions
+     * Return all partitions.
      *
      * @return Partition[]
      */
@@ -77,7 +86,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return all the elements from all partitions as an associative array
+     * Return all the elements from all partitions as an associative array.
      *
      * Note that overlapping keys will be overwritten.
      *
@@ -99,7 +108,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Duplicate (clone) the table
+     * Duplicate (clone) the table.
      *
      * @return this
      */
@@ -109,9 +118,10 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Asssert that the collection has a single partition
+     * Asssert that the collection has a single partition.
      *
      * @param string $methodName
+     *
      * @throws \RuntimeException
      */
     protected function assertSinglePartition($method)
@@ -219,6 +229,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      * modify a new instance of this collection.
      *
      * @param \Closure $closure
+     *
      * @return this
      */
     public function fork(\Closure $closure)
@@ -233,7 +244,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return the first element
+     * Return the first element.
      *
      * @return mixed
      */
@@ -269,7 +280,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Clear the collection
+     * Clear the collection.
      */
     public function clear()
     {
@@ -294,14 +305,14 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     {
         $count = 0;
         foreach ($this->partitions as $partition) {
-            $count+= $partition->count();
+            $count += $partition->count();
         }
 
         return $count;
     }
 
     /**
-     * Return the array keys of the combined paritions
+     * Return the array keys of the combined paritions.
      *
      * @return string[]
      */
@@ -348,6 +359,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
 
         if (null === $offset) {
             $this->getPrimaryPartition()->add($value);
+
             return;
         }
 

@@ -11,7 +11,6 @@
 
 namespace DTL\DataTable;
 
-use DTL\DataTable\Cell;
 use DTL\DataTable\Exception\InvalidCollectionTypeException;
 
 /**
@@ -36,7 +35,6 @@ class Row extends Cellular
         }
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -56,6 +54,7 @@ class Row extends Cellular
      * Return all column names.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function getColumnNames(array $groups = array())
@@ -67,7 +66,9 @@ class Row extends Cellular
      * Return the cell at the given column.
      *
      * @param int $column
+     *
      * @throws \OutOfBoundsException
+     *
      * @return Cell
      */
     public function getCell($column)
@@ -76,11 +77,12 @@ class Row extends Cellular
     }
 
     /**
-     * Modify or create a cell
+     * Modify or create a cell.
      *
      * @param string $columnName
      * @param mixed $value
      * @param array $groups
+     *
      * @return this
      */
     public function setCell($columnName, $value, array $groups = array())
@@ -97,11 +99,12 @@ class Row extends Cellular
     }
 
     /**
-     * Synonym for setCell
+     * Synonym for setCell.
      *
      * @param string $columnName
      * @param mixed $value
      * @param array $groups
+     *
      * @return this
      */
     public function set($columnName, $value, array $groups = array())
@@ -133,6 +136,7 @@ class Row extends Cellular
      * Return an array representation of this row.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function toArray(array $groups = array())
