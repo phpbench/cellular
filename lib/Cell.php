@@ -16,7 +16,7 @@ namespace DTL\DataTable;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Cell implements AggregateableInterface
+class Cell
 {
     /**
      * @var array
@@ -64,77 +64,5 @@ class Cell implements AggregateableInterface
     public function getValue()
     {
         return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function sum(array $groups = array())
-    {
-        return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function min(array $groups = array())
-    {
-        return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function max(array $groups = array())
-    {
-        return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function avg(array $groups = array())
-    {
-        return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function median(array $groups = array(), $ceil = false)
-    {
-        return $this->value;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function values(array $groups = array())
-    {
-        return array($this->value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function fill($value, array $groups = array())
-    {
-        $this->value = $value;
-    }
-
-    /**
-     * {@inheritDpc}.
-     */
-    public function map(\Closure $closure, array $groups = array())
-    {
-        $closure($this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCells()
-    {
-        return array($this);
     }
 }

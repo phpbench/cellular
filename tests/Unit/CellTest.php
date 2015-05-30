@@ -32,17 +32,4 @@ class CellTest extends \PHPUnit_Framework_TestCase
         $cell = new Cell('test');
         $this->assertEquals('test', $cell->getValue());
     }
-
-    /**
-     * It satisfies the AggregateableInterface.
-     */
-    public function testSatisfaction()
-    {
-        $cell = new Cell('test');
-        foreach (array(
-            'getValue', 'sum', 'min', 'max', 'avg', 'median',
-        ) as $method) {
-            $this->assertEquals('test', $cell->$method());
-        }
-    }
 }

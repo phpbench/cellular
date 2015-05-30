@@ -16,7 +16,7 @@ namespace DTL\DataTable;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Column extends Aggregated
+class Column extends Cellular
 {
     /**
      * @var Table
@@ -82,6 +82,6 @@ class Column extends Aggregated
      */
     public function toArray(array $groups = array())
     {
-        return $this->values($groups);
+        return $this->getValues($groups);
     }
 }

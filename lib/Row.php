@@ -12,18 +12,30 @@
 namespace DTL\DataTable;
 
 use DTL\DataTable\Cell;
+use DTL\DataTable\Exception\InvalidCollectionTypeException;
 
 /**
  * Represents a table row.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Row extends Aggregated
+class Row extends Cellular
 {
     /**
      * @var string[]
      */
     private $groups;
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function validateElement($element)
+    {
+        if (!$element instanceof Cell) {
+            throw new InvalidCollectionTypeException($this, $element);
+        }
+    }
+
 
     /**
      * {@inheritDoc}
@@ -60,18 +72,11 @@ class Row extends Aggregated
      */
     public function getCell($column)
     {
-        if (!array_key_exists($column, $this->getElements())) {
-            throw new \OutOfBoundsException(sprintf(
-                'No cell exists at column "%s", known columns: "%s"',
-                $column, implode('", "', array_keys($this->getElements()))
-            ));
-        }
-
-        return $this->getElements()[$column];
+        return $this[$column];
     }
 
     /**
-     * Set or create a cell
+     * Modify or create a cell
      *
      * @param string $columnName
      * @param mixed $value
@@ -80,10 +85,12 @@ class Row extends Aggregated
      */
     public function setCell($columnName, $value, array $groups = array())
     {
-        if ($this->getPrimaryPartition()->exists($columnName)) {
-            $this->getPrimaryPartition()->get($columnName)->setValue($value);
+        $primary = $this->getPrimaryPartition();
+
+        if ($primary->exists($columnName)) {
+            $primary->get($columnName)->setValue($value);
         } else {
-            $this->getPrimaryPartition()->set($columnName, new Cell($value, $groups));
+            $primary->set($columnName, new Cell($value, $groups));
         }
 
         return $this;
@@ -100,11 +107,6 @@ class Row extends Aggregated
     public function set($columnName, $value, array $groups = array())
     {
         return $this->setCell($columnName, $value, $groups);
-    }
-
-    public function remove($columnName)
-    {
-        unset($this[$columnName]);
     }
 
     /**
@@ -136,23 +138,10 @@ class Row extends Aggregated
     public function toArray(array $groups = array())
     {
         $result = array();
-        foreach ($this->values($groups) as $column => $value) {
+        foreach ($this->getValues($groups) as $column => $value) {
             $result[$column] = $value;
         }
 
         return $result;
-    }
-
-    public function order(array $columnNames = array())
-    {
-        $this->assertSinglePartition(__METHOD__);
-
-        $newOrder = array();
-
-        foreach ($columnNames as $columnName) {
-            $newOrder[$columnName] = isset($this[$columnName]) ? $this[$columnName] : new Cell(null);
-        }
-
-        $this->replacePartition(new Partition($newOrder));
     }
 }

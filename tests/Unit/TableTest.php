@@ -27,12 +27,22 @@ class TableTest extends AggregateableCase
     }
 
     /**
+     * It should only accept elements of type Row
+     *
+     * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
+     */
+    public function testInvalidElement()
+    {
+        $this->getAggregate()[2] = new Cell('asd');
+    }
+
+    /**
      * It should get columns.
      */
     public function testGetColumn()
     {
         $column = $this->getAggregate()->getColumn(1);
-        $this->assertEquals(1, $column->sum());
+        $this->assertEquals(array(1), $column->getValues());
     }
 
     /**
@@ -118,5 +128,37 @@ class TableTest extends AggregateableCase
     {
         $count = $table->getColumnCount();
         $this->assertEquals(2, $count);
+    }
+
+    /**
+     * It should return a row by index
+     */
+    public function testGetRow()
+    {
+        $table = Table::create();
+        $table->createAndAddRow();
+        $row2 = $table->createAndAddRow();
+
+        $this->assertSame($table->getRow(1), $row2);
+    }
+
+    /**
+     * It should return a rows by groups
+     */
+    public function testGetRowByGroups()
+    {
+        $table = Table::create();
+        $table->createAndAddRow(array('foo'));
+        $this->assertCount(0, $table->getRows(array('bar')));
+        $this->assertCount(1, $table->getRows(array('foo')));
+    }
+
+    /**
+     * It should return its groups (tables never have any groups at the moment)
+     */
+    public function testGetGroups()
+    {
+        $table = Table::create();
+        $this->assertCount(0, $table->getGroups());
     }
 }

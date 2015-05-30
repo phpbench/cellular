@@ -132,7 +132,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testApply()
     {
         $collection = new Collection(array(1, 2), array(3, 4));
-        $collection->apply(function (&$element) {
+        $collection->each(function (&$element) {
             $element++;
         });
 
@@ -225,5 +225,88 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertCount(1, $collection);
+    }
+
+    /**
+     * It will not allow array access on a table with multiple partitions
+     *
+     * @expectedException RuntimeException
+     */
+    public function testNoArrayAccessMultiPartitionExists()
+    {
+        $collection = new Collection(array(), array());
+        isset($collection['asd']);
+    }
+
+    /**
+     * It will not allow array access on a table with multiple partitions
+     *
+     * @expectedException RuntimeException
+     */
+    public function testNoArrayAccessMultiPartitionGet()
+    {
+        $collection = new Collection(array(), array());
+        $collection['asd'];
+    }
+
+    /**
+     * It will not allow array access on a table with multiple partitions
+     *
+     * @expectedException RuntimeException
+     */
+    public function testNoArrayAccessMultiPartitionSet()
+    {
+        $collection = new Collection(array(), array());
+        $collection['asd'] = 'asd';
+    }
+
+    /**
+     * It will not allow array access on a table with multiple partitions
+     *
+     * @expectedException RuntimeException
+     */
+    public function testNoArrayAccessMultiPartitionUnset()
+    {
+        $collection = new Collection(array(), array());
+        unset($collection['asd']);
+    }
+
+    /**
+     * It should clear
+     */
+    public function testClear()
+    {
+        $collection = new Collection(array(1, 2), array(1, 2));
+        $collection->clear();
+        $this->assertCount(0, $collection);
+        $this->assertCount(1, $collection->getPartitions());
+    }
+
+    /**
+     * It should duplicate itself
+     */
+    public function testDuplicate()
+    {
+        $collection = new Collection(array(1, 2));
+        $duplicate = $collection->duplicate();
+        $this->assertNotSame($collection, $duplicate);
+        $this->assertEquals(array(1, 2), $duplicate->getElements());
+    }
+
+    /**
+     * It should duplicate with objects in the collection
+     */
+    public function testDuplicateWithObject()
+    {
+        $object1 = new \stdClass;
+        $object2 = new \stdClass;
+
+        $collection = new Collection(array($object1, $object2));
+        $duplicate = $collection->duplicate();
+        $this->assertNotSame($collection, $duplicate);
+        $elements = $duplicate->getElements();
+        $this->assertContainsOnlyInstancesOf('stdClass', $elements);
+        $this->assertCount(2, $elements);
+        $this->assertNotSame($elements[0], $object1);
     }
 }

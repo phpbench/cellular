@@ -22,6 +22,16 @@ class RowTest extends AggregateableCase
     }
 
     /**
+     * It should only accept elements of type Cell
+     *
+     * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
+     */
+    public function testInvalidElement()
+    {
+        $this->getAggregate()[2] = 'as';
+    }
+
+    /**
      * It should get cells by index.
      */
     public function testGetCell()
@@ -60,17 +70,29 @@ class RowTest extends AggregateableCase
     }
 
     /**
-     * Its should fill.
+     * It should set the value of an existing cell
      */
-    public function testFill()
+    public function testSetExisting()
     {
         $row = new Row(array(
             'hello' => new Cell('goodbye'),
-            2 => new Cell('hello'),
         ));
 
-        $row->fill('hai');
-        $this->assertEquals('hai', $row->getCell('hello')->getValue());
-        $this->assertEquals('hai', $row->getCell(2)->getValue());
+        $row->set('hello', 'hello');
+        $this->assertEquals($row['hello']->getValue(), 'hello');
+    }
+
+    /**
+     * It should create a new cell if a non-existing column name is specified in "set"
+     */
+    public function testSetNonExisting()
+    {
+        $row = new Row(array(
+            'hello' => new Cell('goodbye'),
+        ));
+
+        $row->set('goodbye', 'hello');
+        $this->assertInstanceOf('DTL\DataTable\Cell', $row['goodbye']);
+        $this->assertEquals($row['goodbye']->getValue(), 'hello');
     }
 }

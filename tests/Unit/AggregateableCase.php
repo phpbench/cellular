@@ -17,80 +17,12 @@ use DTL\DataTable\Row;
 abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * It should return the sum.
-     */
-    public function testSum()
-    {
-        $sum = $this->getAggregate()->sum(['x']);
-        $this->assertEquals(33, $sum);
-    }
-
-    /**
-     * It should return the min.
-     */
-    public function testMin()
-    {
-        $min = $this->getAggregate()->min(['x']);
-        $this->assertEquals(1, $min);
-    }
-
-    /**
-     * It should return the max.
-     */
-    public function testMax()
-    {
-        $max = $this->getAggregate()->max(['x']);
-        $this->assertEquals(13, $max);
-    }
-
-    /**
-     * It should return the average.
-     */
-    public function testAverage()
-    {
-        $expected = 33 / 7;
-        $this->assertEquals($expected, $this->getAggregate()->avg(['x']));
-    }
-
-    /**
-     * Average should handle no values.
-     */
-    public function testAverageNoValue()
-    {
-        $this->assertEquals(0, $this->getAggregate()->avg(['notexist']));
-    }
-
-    /**
-     * It should return the median (floor).
-     */
-    public function testMedianFloor()
-    {
-        $this->assertEquals('3', $this->getAggregate()->median(['x']));
-    }
-
-    /**
-     * It should return the median (ceil).
-     */
-    public function testMedianCeil()
-    {
-        $this->assertEquals('5', $this->getAggregate()->median(['x'], true));
-    }
-
-    /**
-     * Median should handle no values.
-     */
-    public function testMedianNoValues()
-    {
-        $this->assertEquals(0, $this->getAggregate()->median(['notexist']));
-    }
-
-    /**
      * It should return all of the values.
      */
-    public function testValues()
+    public function testGetValues()
     {
         $expected = array(1, 13, 1, 5, 8, 3, 2);
-        $this->assertEquals($expected, array_values($this->getAggregate()->values(['x'])));
+        $this->assertEquals($expected, array_values($this->getAggregate()->getValues(['x'])));
     }
 
     /**
@@ -103,7 +35,7 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
         $aggregate->mapValues(function (Cell $cell) {
             return $cell->getValue() + 1;
         }, ['x']);
-        $this->assertEquals($expected, array_values($aggregate->values(['x'])));
+        $this->assertEquals($expected, array_values($aggregate->getValues(['x'])));
     }
 
     protected function getRowAggregate()

@@ -15,17 +15,23 @@ use DTL\DataTable\Builder\TableBuilder;
 use DTL\DataTable\Builder\RowBuilder;
 use DTL\DataTable\Table;
 use DTL\DataTable\Row;
+use DTL\DataTable\Exception\InvalidCollectionTypeException;
 
 /**
  * Represents a table.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Table extends Aggregated
+class Table extends Cellular
 {
+    /**
+     * {@inheritDoc}
+     */
     protected function validateElement($element)
     {
-        return $element instanceof Row;
+        if (!$element instanceof Row) {
+            throw new InvalidCollectionTypeException($this, $element);
+        }
     }
 
     /**
@@ -63,17 +69,29 @@ class Table extends Aggregated
     }
 
 
-    public function createRow(array $cells = array(), array $groups = array())
+    /**
+     * Reurn a new row with the given groups.
+     *
+     * @param string[] $groups
+     * @return Row
+     */
+    public function createRow(array $groups = array())
     {
-        $row = new Row($cells);
+        $row = new Row(array());
         $row->setGroups($groups);
 
         return $row;
     }
 
-    public function createAndAddRow(array $cells = array(), array $groups = array())
+    /**
+     * Create a new row, add it to this table then return it.
+     *
+     * @param string[] $groups
+     * @return Row
+     */
+    public function createAndAddRow(array $groups = array())
     {
-        $row = $this->createRow($cells, $groups);
+        $row = $this->createRow($groups);
         $this->addRow($row);
         return $row;
     }
@@ -201,14 +219,5 @@ class Table extends Aggregated
     public function getGroups()
     {
         return array();
-    }
-
-    public function align()
-    {
-        $columnNames = $this->getColumnNames();
-
-        foreach ($this as $row) {
-            $row->order($columnNames);
-        }
     }
 }
