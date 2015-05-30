@@ -10,4 +10,3 @@ before_script:
 
 script: 
     - phpunit
-    - ! 'php vendor/bin/phpbench run tests/Benchmark --report=''{"name": "console_table", "memory": false, "aggregate_iterations": true, "revolutions": true}'''

@@ -28,18 +28,15 @@ Col 1 | Col 2 | Col 3
 Would be created as follows:
 
 ````php
-$table = TableBuilder::create()
-    ->row()
-        ->set('col1', 12)
-        ->set('col2', 14)
-        ->set('col3', 4)
-    ->end()
-    ->row()
-        ->set('col1', 12)
-        ->set('col2', 14)
-        ->set('col3', 4)
-    ->end()
-    ->getTable();
+$table = Table::create();
+$table->createAndAddRow()
+    ->set('col1', 12)
+    ->set('col2', 14)
+    ->set('col3', 4);
+$table->createAndAddRow()
+    ->set('col1', 12)
+    ->set('col2', 14)
+    ->set('col3', 4)
 ````
 
 Or without the builder:
@@ -59,10 +56,10 @@ $table = new Table(
  );
 ````
 
-Resolving aggregate values
---------------------------
 
-All elements implement an aggregateable interface, allowing the following:
+Retrieving cell values
+----------------------
+
 
 ````php
 echo $table->sum(); // sum of table
