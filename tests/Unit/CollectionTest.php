@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Collection;
+use DTL\Cellular\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

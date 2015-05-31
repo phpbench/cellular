@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Exception;
+namespace DTL\Cellular\Exception;
 
 class InvalidCollectionTypeException extends \InvalidArgumentException
 {

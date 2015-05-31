@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable;
+namespace DTL\Cellular;
 
-use DTL\DataTable\Exception\InvalidCollectionTypeException;
+use DTL\Cellular\Exception\InvalidCollectionTypeException;
 
 /**
  * Represents a table row.

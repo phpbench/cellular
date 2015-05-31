@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Table;
-use DTL\DataTable\Row;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Column;
+use DTL\Cellular\Table;
+use DTL\Cellular\Row;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Column;
 
 class TableTest extends AggregateableCase
 {
@@ -28,7 +28,7 @@ class TableTest extends AggregateableCase
     /**
      * It should only accept elements of type Row.
      *
-     * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
+     * @expectedException DTL\Cellular\Exception\InvalidCollectionTypeException
      */
     public function testInvalidElement()
     {
@@ -114,7 +114,7 @@ class TableTest extends AggregateableCase
     public function testGetColumns(Table $table)
     {
         $columns = $table->getColumns();
-        $this->assertContainsOnlyInstancesOf('DTL\DataTable\Column', $columns);
+        $this->assertContainsOnlyInstancesOf('DTL\Cellular\Column', $columns);
         $this->assertCount(2, $columns);
     }
 

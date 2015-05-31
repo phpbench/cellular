@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable;
+namespace DTL\Cellular;
 
 /**
  * Calculator.

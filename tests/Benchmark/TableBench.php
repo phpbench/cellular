@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Benchmark;
+namespace DTL\Cellular\Tests\Benchmark;
 
 use PhpBench\Benchmark;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Row;
-use DTL\DataTable\Table;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Row;
+use DTL\Cellular\Table;
 use PhpBench\Benchmark\Iteration;
 
 /**

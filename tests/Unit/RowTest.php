@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Cell;
-use DTL\DataTable\Row;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Row;
 
 class RowTest extends AggregateableCase
 {
@@ -24,7 +24,7 @@ class RowTest extends AggregateableCase
     /**
      * It should only accept elements of type Cell.
      *
-     * @expectedException DTL\DataTable\Exception\InvalidCollectionTypeException
+     * @expectedException DTL\Cellular\Exception\InvalidCollectionTypeException
      */
     public function testInvalidElement()
     {
@@ -92,7 +92,7 @@ class RowTest extends AggregateableCase
         ));
 
         $row->set('goodbye', 'hello');
-        $this->assertInstanceOf('DTL\DataTable\Cell', $row['goodbye']);
+        $this->assertInstanceOf('DTL\Cellular\Cell', $row['goodbye']);
         $this->assertEquals($row['goodbye']->getValue(), 'hello');
     }
 }

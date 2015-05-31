@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Table;
-use DTL\DataTable\Row;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Column;
+use DTL\Cellular\Table;
+use DTL\Cellular\Row;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Column;
 
 class ColumnTest extends \PHPUnit_Framework_TestCase
 {

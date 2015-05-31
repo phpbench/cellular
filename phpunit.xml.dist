@@ -7,7 +7,7 @@
     >
 
     <testsuites>
-        <testsuite name="DataTable test suite">
+        <testsuite name="Cellular test suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Calculator;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Row;
+use DTL\Cellular\Calculator;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Row;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
