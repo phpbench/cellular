@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable;
+namespace DTL\Cellular;
 
 /**
  * Represents a table column.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Column extends Aggregated
+class Column implements CellularInterface
 {
     /**
      * @var Table
@@ -45,7 +45,10 @@ class Column extends Aggregated
     {
         $cells = array();
         foreach ($this->table->getRows() as $row) {
-            $cell = $row->getCell($this->key);
+            if (!isset($row[$this->key])) {
+                continue;
+            }
+            $cell = $row[$this->key];
             foreach ($groups as $group) {
                 if (!in_array($group, $cell->getGroups())) {
                     continue 2;
@@ -56,6 +59,30 @@ class Column extends Aggregated
         }
 
         return $cells;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValues(array $groups = array())
+    {
+        $values = array();
+        foreach ($this->getCells($groups) as $column => $cell) {
+            $values[$column] = $cell->getValue();
+        }
+
+        return $values;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function mapValues(\Closure $closure, array $groups = array())
+    {
+        foreach ($this->getCells($groups) as $cell) {
+            $value = $closure($cell);
+            $cell->setValue($value);
+        }
     }
 
     /**
@@ -78,6 +105,6 @@ class Column extends Aggregated
      */
     public function toArray(array $groups = array())
     {
-        return $this->values($groups);
+        return $this->getValues($groups);
     }
 }

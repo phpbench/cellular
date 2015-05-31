@@ -9,30 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable;
+namespace DTL\Cellular;
 
-use DTL\DataTable\Builder\TableBuilder;
-use DTL\DataTable\Builder\RowBuilder;
-use DTL\DataTable\Table;
+use DTL\Cellular\Exception\InvalidCollectionTypeException;
 
 /**
  * Represents a table.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Table extends Aggregated
+class Table extends Cellular
 {
     /**
-     * @var Row[]
+     * {@inheritDoc}
      */
-    private $rows;
-
-    /**
-     * @param array $rows
-     */
-    public function __construct(array $rows = array())
+    protected function validateElement($element)
     {
-        $this->rows = $rows;
+        if (!$element instanceof Row) {
+            throw new InvalidCollectionTypeException($this, $element);
+        }
     }
 
     /**
@@ -43,12 +38,12 @@ class Table extends Aggregated
     public function getRows(array $groups = array())
     {
         if (empty($groups)) {
-            return $this->rows;
+            return $this->getElements();
         }
 
         $rows = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             foreach ($groups as $group) {
                 if (in_array($group, $row->getGroups())) {
                     $rows[] = $row;
@@ -57,6 +52,46 @@ class Table extends Aggregated
         }
 
         return $rows;
+    }
+
+    /**
+     * Add a row to the table.
+     *
+     * @param Row $row
+     */
+    public function addRow(Row $row)
+    {
+        $this[] = $row;
+    }
+
+    /**
+     * Reurn a new row with the given groups.
+     *
+     * @param string[] $groups
+     *
+     * @return Row
+     */
+    public function createRow(array $groups = array())
+    {
+        $row = new Row(array());
+        $row->setGroups($groups);
+
+        return $row;
+    }
+
+    /**
+     * Create a new row, add it to this table then return it.
+     *
+     * @param string[] $groups
+     *
+     * @return Row
+     */
+    public function createAndAddRow(array $groups = array())
+    {
+        $row = $this->createRow($groups);
+        $this->addRow($row);
+
+        return $row;
     }
 
     /**
@@ -78,7 +113,7 @@ class Table extends Aggregated
     {
         $columnNames = array();
 
-        foreach ($this->rows as $row) {
+        foreach ($this->getElements() as $row) {
             foreach ($row->getColumnNames($groups) as $columnName) {
                 $columnNames[$columnName] = $columnName;
             }
@@ -113,7 +148,7 @@ class Table extends Aggregated
     public function getColumnCount(array $groups = array())
     {
         $min = null;
-        foreach ($this->rows as $row) {
+        foreach ($this->getElements() as $row) {
             $cellCount = count($row->getCells($groups));
             if ($min === null || $cellCount < $min) {
                 $min = $cellCount;
@@ -134,14 +169,14 @@ class Table extends Aggregated
      */
     public function getRow($index)
     {
-        if (!isset($this->rows[$index])) {
+        if (!isset($this->getElements()[$index])) {
             throw new \OutOfRangeException(sprintf(
                 'Row with index "%s" does not exist. Must be >=0 < %d',
-                $index, count($this->rows)
+                $index, count($this->getElements())
             ));
         }
 
-        return $this->rows[$index];
+        return $this[$index];
     }
 
     /**
@@ -150,7 +185,7 @@ class Table extends Aggregated
     public function getCells(array $groups = array())
     {
         $cells = array();
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             foreach ($row->getCells($groups) as $cell) {
                 $cells[] = $cell;
             }
@@ -169,68 +204,11 @@ class Table extends Aggregated
     public function toArray(array $groups = array())
     {
         $result = array();
-        foreach ($this->rows as $row) {
+        foreach ($this as $row) {
             $result[] = $row->toArray($groups);
         }
 
         return $result;
-    }
-
-    /**
-     * Return a new table instance with only the rows which
-     * contain unique column names according to $columnNames.
-     *
-     * The callback accepts, for each set of unique $columnNames, a
-     * Table with the unique set and the Row instance which will represent
-     * that set in the final Table instance.
-     *
-     * For example:
-     *
-     * ````
-     * $aggregatedTable = $table->aggregate(
-     *     function (Table $rowSet, Row $newRow) {
-     *         $newRow->set('foo', $rowSet->getColumn('foo')->sum());
-     *     }.
-     *     array('col1', 'col2'),
-     * );
-     * ````
-     *
-     * @param array $columnNames
-     * @param array $groups
-     * @return Table $callback
-     */
-    public function aggregate(\Closure $callback, array $columnNames = array(), array $groups = array())
-    {
-        $rowSets = array();
-        $groupedTable = TableBuilder::create();
-
-        foreach ($this->getRows($groups) as $row) {
-            $key = '';
-            foreach ($columnNames as $columnName) {
-                $key .= $row->getCell($columnName)->value();
-            }
-
-            $newRow = RowBuilder::create(null, $row->getCells($groups), $row->getGroups());
-            if (!isset($rowSets[$key])) {
-                $rowSets[$key] = TableBuilder::create()->addRow($newRow);
-            } else {
-                $rowSets[$key]->addRow($newRow);
-            }
-        }
-
-        foreach ($rowSets as $rowSet) {
-            $rows = $rowSet->getRows();
-            $firstRowBuilder = reset($rows);
-            $callback($rowSet->getTable(), $firstRowBuilder);
-            $groupedTable->addRow($firstRowBuilder);
-        }
-
-        return $groupedTable->getTable();
-    }
-
-    public function builder(array $groups = array())
-    {
-        return TableBuilder::create($this->getRows($groups));
     }
 
     /**
@@ -239,5 +217,30 @@ class Table extends Aggregated
     public function getGroups()
     {
         return array();
+    }
+
+    /**
+     * Align the table.
+     *
+     * This happens in two passes. The first determines all
+     * of the existing column names. The second orders all
+     * rows based on the determined column names.
+     *
+     * Rows will be filled with NULL valued cells where columns
+     * are missing.
+     */
+    public function align()
+    {
+        $columnNames = array();
+        foreach ($this as $row) {
+            $columnNames = array_merge(
+                $columnNames,
+                $row->getColumnNames()
+            );
+        }
+
+        foreach ($this as $row) {
+            $row->order($columnNames);
+        }
     }
 }

@@ -9,13 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Table;
-use DTL\DataTable\Row;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Column;
-use DTL\DataTable\Builder\TableBuilder;
+use DTL\Cellular\Table;
+use DTL\Cellular\Row;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Column;
 
 class TableTest extends AggregateableCase
 {
@@ -27,12 +26,22 @@ class TableTest extends AggregateableCase
     }
 
     /**
+     * It should only accept elements of type Row.
+     *
+     * @expectedException DTL\Cellular\Exception\InvalidCollectionTypeException
+     */
+    public function testInvalidElement()
+    {
+        $this->getAggregate()[2] = new Cell('asd');
+    }
+
+    /**
      * It should get columns.
      */
     public function testGetColumn()
     {
         $column = $this->getAggregate()->getColumn(1);
-        $this->assertEquals(1, $column->sum());
+        $this->assertEquals(array(1), $column->getValues());
     }
 
     /**
@@ -66,91 +75,20 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should aggregate to one row if an empty callback with no column names is given.
-     */
-    public function testAggregate()
-    {
-        $table = TableBuilder::create()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-                ->set(2, 'goodbye', array('group1'))
-            ->end()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-                ->set(2, 'goodbye')
-            ->end()
-            ->row()
-                ->set(0, 'goodbye')
-                ->set(1, 12)
-                ->set(2, 'bar')
-            ->end()
-            ->getTable();
-
-        $aggregated = $table->aggregate(function () {});
-        $this->assertCount(1, $aggregated->getRows());
-
-        return $table;
-    }
-
-    /**
-     * It should aggregate to the unique values of the given columns.
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateColumns($table)
-    {
-        $aggregated = $table->aggregate(function () {}, array(0));
-        $this->assertCount(2, $aggregated->getRows());
-        $this->assertEquals(12, $aggregated->getRow(0)->getCell(1)->value());
-    }
-
-    /**
-     * It should apply the callback to the aggregate.
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateColumnsCallback($table)
-    {
-        $aggregated = $table->aggregate(function ($table, $row) {
-            $row->set(1, $table->getColumn(1)->sum());
-        }, array(0));
-        $this->assertEquals(24, $aggregated->getRow(0)->getCell(1)->value());
-    }
-
-    /**
-     * Its should preserve groups when aggregatating
-     *
-     * @depends testAggregate
-     */
-    public function testAggregateWithGroups($table)
-    {
-        $aggregated = $table->aggregate(function ($table, $row) {
-            $row->set(1, $table->getColumn(2)->getGroups());
-        }, array(0));
-        $this->assertEquals(array('group1'), $aggregated->getRow(0)->getCell(1)->value());
-    }
-
-    /**
      * It should return a list of column names.
      */
     public function testGetColumnNames()
     {
-        $table = TableBuilder::create()
-            ->row()
-                ->set(0, 'hello', ['one'])
-                ->set(1, 12)
-            ->end()
-            ->row()
-                ->set(0, 'hello')
-                ->set(1, 12)
-            ->end()
-            ->row()
-                ->set(0, 'goodbye', ['one'])
-                ->set(1, 12)
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set(0, 'hello', ['one'])
+            ->set(1, 12);
+        $table->createAndAddRow()
+            ->set(0, 'hello')
+            ->set(1, 12);
+        $table->createAndAddRow()
+            ->set(0, 'goodbye', ['one'])
+            ->set(1, 12);
 
         $columnNames = $table->getColumnNames();
         $this->assertEquals(array(0, 1), $columnNames);
@@ -176,7 +114,7 @@ class TableTest extends AggregateableCase
     public function testGetColumns(Table $table)
     {
         $columns = $table->getColumns();
-        $this->assertContainsOnlyInstancesOf('DTL\DataTable\Column', $columns);
+        $this->assertContainsOnlyInstancesOf('DTL\Cellular\Column', $columns);
         $this->assertCount(2, $columns);
     }
 
@@ -189,5 +127,58 @@ class TableTest extends AggregateableCase
     {
         $count = $table->getColumnCount();
         $this->assertEquals(2, $count);
+    }
+
+    /**
+     * It should return a row by index.
+     */
+    public function testGetRow()
+    {
+        $table = Table::create();
+        $table->createAndAddRow();
+        $row2 = $table->createAndAddRow();
+
+        $this->assertSame($table->getRow(1), $row2);
+    }
+
+    /**
+     * It should return a rows by groups.
+     */
+    public function testGetRowByGroups()
+    {
+        $table = Table::create();
+        $table->createAndAddRow(array('foo'));
+        $this->assertCount(0, $table->getRows(array('bar')));
+        $this->assertCount(1, $table->getRows(array('foo')));
+    }
+
+    /**
+     * It should return its groups (tables never have any groups at the moment).
+     */
+    public function testGetGroups()
+    {
+        $table = Table::create();
+        $this->assertCount(0, $table->getGroups());
+    }
+
+    /**
+     * It should align the table and fill in missing cells in each row.
+     */
+    public function testAlign()
+    {
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('hello', 'goodbye')
+            ->set('goodbye', 'hello')
+            ->set('adios', 'bienvenido');
+        $table->createAndAddRow()
+            ->set('aurevior', 'salut')
+            ->set('gutentag', 'auf wiedersehen');
+        $table->align();
+
+        foreach ($table as $index => $row) {
+            $key = 'hello';
+            $this->assertTrue(isset($row[$key]), 'Row ' . $index . ' has key ' . $key);
+        }
     }
 }

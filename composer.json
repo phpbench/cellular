@@ -1,5 +1,5 @@
 {
-    "name": "dantleech/data-table",
+    "name": "dantleech/cellular",
     "description": "Represent and analyze tabular data",
     "license": "MIT",
     "authors": [
@@ -10,17 +10,14 @@
     ],
     "minimum-stability": "dev",
     "require": {},
-    "require-dev": {
-        "dantleech/phpbench": "~1.0"
-    },
     "autoload": {
         "psr-4": {
-            "DTL\\DataTable\\": "lib/"
+            "DTL\\Cellular\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "DTL\\DataTable\\Tests\\": "tests/"
+            "DTL\\Cellular\\Tests\\": "tests/"
         }
     },
     "extra": {

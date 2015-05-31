@@ -9,10 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Cell;
-use DTL\DataTable\Row;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Row;
 
 class RowTest extends AggregateableCase
 {
@@ -22,15 +22,25 @@ class RowTest extends AggregateableCase
     }
 
     /**
+     * It should only accept elements of type Cell.
+     *
+     * @expectedException DTL\Cellular\Exception\InvalidCollectionTypeException
+     */
+    public function testInvalidElement()
+    {
+        $this->getAggregate()[2] = 'as';
+    }
+
+    /**
      * It should get cells by index.
      */
     public function testGetCell()
     {
         $cell = $this->getAggregate()->getCell(0);
-        $this->assertEquals('text', $cell->value());
+        $this->assertEquals('text', $cell->getValue());
 
         $cell = $this->getAggregate()->getCell(4);
-        $this->assertEquals(5, $cell->value());
+        $this->assertEquals(5, $cell->getValue());
     }
 
     /**
@@ -50,27 +60,39 @@ class RowTest extends AggregateableCase
     {
         $row = new Row(array(
             'hello' => new Cell('goodbye'),
-            2 => new Cell('hello'),
+            0 => new Cell('hello'),
         ));
 
         $this->assertEquals(array(
             'hello' => 'goodbye',
-            2 => 'hello',
+            0 => 'hello',
         ), $row->toArray());
     }
 
     /**
-     * Its should fill.
+     * It should set the value of an existing cell.
      */
-    public function testFill()
+    public function testSetExisting()
     {
         $row = new Row(array(
             'hello' => new Cell('goodbye'),
-            2 => new Cell('hello'),
         ));
 
-        $row->fill('hai');
-        $this->assertEquals('hai', $row->getCell('hello')->value());
-        $this->assertEquals('hai', $row->getCell(2)->value());
+        $row->set('hello', 'hello');
+        $this->assertEquals($row['hello']->getValue(), 'hello');
+    }
+
+    /**
+     * It should create a new cell if a non-existing column name is specified in "set".
+     */
+    public function testSetNonExisting()
+    {
+        $row = new Row(array(
+            'hello' => new Cell('goodbye'),
+        ));
+
+        $row->set('goodbye', 'hello');
+        $this->assertInstanceOf('DTL\Cellular\Cell', $row['goodbye']);
+        $this->assertEquals($row['goodbye']->getValue(), 'hello');
     }
 }

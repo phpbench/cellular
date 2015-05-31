@@ -1,9 +1,9 @@
-Data Table
-==========
+Cellular
+========
 
-[![Build Status](https://travis-ci.org/dantleech/data-table.svg?branch=master)](https://travis-ci.org/dantleech/data-table) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dantleech/data-table/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dantleech/data-table/?branch=master)
+[![Build Status](https://travis-ci.org/dantleech/cellular.svg?branch=master)](https://travis-ci.org/dantleech/cellular) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dantleech/cellular/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dantleech/cellular/?branch=master)
 
-The data table library provides an object oriented way of building, representing and analyzing tabular data.
+The cellular library provides an object oriented way of building, representing and analyzing tabular data.
 
 Features:
 
@@ -28,18 +28,15 @@ Col 1 | Col 2 | Col 3
 Would be created as follows:
 
 ````php
-$table = TableBuilder::create()
-    ->row()
-        ->set('col1', 12)
-        ->set('col2', 14)
-        ->set('col3', 4)
-    ->end()
-    ->row()
-        ->set('col1', 12)
-        ->set('col2', 14)
-        ->set('col3', 4)
-    ->end()
-    ->getTable();
+$table = Table::create();
+$table->createAndAddRow()
+    ->set('col1', 12)
+    ->set('col2', 14)
+    ->set('col3', 4);
+$table->createAndAddRow()
+    ->set('col1', 12)
+    ->set('col2', 14)
+    ->set('col3', 4)
 ````
 
 Or without the builder:
@@ -59,136 +56,125 @@ $table = new Table(
  );
 ````
 
-Resolving aggregate values
---------------------------
+Retrieving cell values
+----------------------
 
-All elements implement an aggregateable interface, allowing the following:
+You can retrieve values from `Table`, `Row` and `Column` instances as follows:
 
 ````php
-echo $table->sum(); // sum of table
-echo $table->avg(); // average value of table
-
-foreach ($table as $row) {
-    echo $row->sum(); // average value of the row
-    echo $row->avg(); // min value of row
-}
-
-echo $table->getColumn(0)->sum(); // sum of column
+$table->getValues(); // return an array containg all cell values
+$table->getRow(0)->getValues();
+$table->getColumn('col1')->getValues();
 ````
 
-Assigning groups and accessing group data
------------------------------------------
+Groups
+------
 
-Groups can be used to analyze only certain cells:
+You apply groups to cells:
 
 ````php
- $table = new Table(
-     new Row(array(
-         'col1' => new Cell(12, ['group1']),
-         'col2' => new Cell(14, ['group1']),
-         'col3' => new Cell(4, ['group2']),
-     )),
- );
+$table->createAndAddRow()
+    ->set('hello, 'vaue', array('group1'));
 
- echo $table->sum(['group1']); // 26
- echo $table->sum(['group2']); // 4
+var_dump($table->getCells(array('group1'))); // dump all cells in group1
+
+$table->mapValues(function ($value) {
+    return 'goodbye';
+}, array('group1')); // set the value of all cells in group1 to "goodbye"
 ````
 
-Applying a callback to each cell
---------------------------------
+Using the Calculator
+--------------------
 
-You can apply a callback to each cell on either a `Table` or a `Row`:
+The calculator allows you to apply certain calculations to values, `Cell`
+instances or any instance of `CellularInterface`:
 
 ````php
-$table = TableBuilder::create()
-    ->row()
-        ->set('col1', 'foobar')
-    ->end()
-    ->getTable();
+$mean = Calculator::mean($table); // return the mean (average) value of the table
 
-$table->map(function (Cell $cell) {
-    $cell->setValue($cell->value() + 1);
+$median = Calculator::median($table->getRow(0)); // return the median value of the first row
+
+$deviation = Calculator::deviation(
+    Calculator::mean($table->getColumn('col1')),
+    $table->getRow(0)->getCell('col1')
+); // return the deviation of "col1" in the first row as a percentage from the average value of "col1"
+````
+
+Current functions:
+
+- `sum`: Return the sum of values
+- `min`: Return the minimum value
+- `max`: Return the maximum value
+- `mean`: Return the mean (average) value
+- `median`: Return the median value
+- `deviation`: Return the deviation as a percentage
+
+Partitioning and Forking
+------------------------
+
+`Table` and `Row` instances provide the following methods:
+
+- `partition`: Internally divide the collection of elements according to a
+  given callback.
+- `fork`: Fork the table into a new table. The callback is called once for
+  each partition.
+
+This is useful for generating new tables based on aggregated values of an
+original table.
+
+For example:
+
+````php
+$newTable = $table
+    ->partition(function ($row) {
+        return $row['class'];
+    })
+    ->fork(function ($table, $newTable) use ($cols, &$newCols, $options, $functions) {
+        $newTable->createAndAddRow()
+            ->set(
+                'number', 
+                Calculator::sum($table->getColumn('number'))
+            );
+    });
+````
+
+The above example will "partition" the original table by the `class` column.
+Internally a new table will be created each time the `partition` callback
+changes its value (note that in applicable cases you will need to sort the
+table).
+
+It will then `fork` a new table. The callback is passed a each partition table
+in turn and also the new table instance.
+
+The result will be anagous to the following SQL: `SELECT SUM(number) FROM table GROUP BY class`.
+
+Sorting
+-------
+
+Sorting can be achieved as follows:
+
+````php
+$table->sort(function ($row1, $row2) {
+    return $row1['col1'] > $row2['col1'];
 });
 ````
+
+Evaluating values
+-----------------
+
+Values can be evaluated as follows:
+
+````php
+$sum = $table->evaluate(function ($row, $lastValue) {
+    $lastValue += $row['cell']->getValue();
+}, 0); // evaluates the sum of the column "cell"
+````
+
+The callback is passed the element and the previous result. The initial result
+is given as the second argument to `evaluate`.
 
 Other methods
 -------------
 
-- `fill`: Fill all matching cells with the given value
-
-Aggregating/grouping table data
--------------------------------
-
-You can aggregate the values in a table based on one or more unique cell
-values in a given column.
-
-````php
-$table = new Table(
-    new Row(array(
-        'category' => new Cell('beer'),
-        'quantity' => new Cell(14),
-        'quality'  => new Cell(4),
-    )),
-    new Row(array(
-        'category' => new Cell('beer'),
-        'quantity' => new Cell(14),
-        'quality'  => new Cell(4),
-    )),
-    new Row(array(
-        'category' => new Cell('snitzel'),
-        'quantity' => new Cell(14),
-        'quality'  => new Cell(4),
-    )),
-);
-
-$newInstance = $table->aggregate(function (Table $rowSet, RowBuilder $rowBuilder) {
-    $rowBuilder->set('quantity', $rowSet->sum());
-}, ['category']);
-
-$newInstance->getRow(0)->getCell('quantity'); // 28 -- the values have been aggregated
-````
-
-Building upon existing tables
------------------------------
-
-Often you will need to add extra columns or rows to existing tables, for
-example to add a column total. This can be done in two steps:
-
-````php
-$table = TableBuilder::create()
-    ->row()
-        ->set('price', 10)
-    ->end()
-    ->row()
-        ->set('price', 20)
-    ->end()
-    ->getTable();
-
-// get a new builder instance based on the existing table
-$builder = $table->builder();
-
-// add a new row with the total price
-$builder
-    ->row()
-        ->set('price', $table->getColumn('price')->sum())
-    ->end();
-
-$table = $builder->getTable();
-
-$table->toArray(); 
-
-$expected = array(
-    array(
-        'price' => 10,
-    ),
-    array(
-        'price' => 20,
-    ),
-    array(
-        'price' => 30
-    ),
-);
-
-var_dump($expected === $table->toArray()); // true
-````
-
+- `filter`: Filter the results by a closure. Returns a new instance.
+- `clear`: Clear the collection

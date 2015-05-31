@@ -9,9 +9,9 @@
  * file that was distributed with this source code.
  */
 
-namespace DTL\DataTable\Tests\Unit;
+namespace DTL\Cellular\Tests\Unit;
 
-use DTL\DataTable\Cell;
+use DTL\Cellular\Cell;
 
 class CellTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,19 +30,6 @@ class CellTest extends \PHPUnit_Framework_TestCase
     public function testGetSetValue()
     {
         $cell = new Cell('test');
-        $this->assertEquals('test', $cell->value());
-    }
-
-    /**
-     * It satisfies the AggregateableInterface.
-     */
-    public function testSatisfaction()
-    {
-        $cell = new Cell('test');
-        foreach (array(
-            'value', 'sum', 'min', 'max', 'avg', 'median',
-        ) as $method) {
-            $this->assertEquals('test', $cell->$method());
-        }
+        $this->assertEquals('test', $cell->getValue());
     }
 }

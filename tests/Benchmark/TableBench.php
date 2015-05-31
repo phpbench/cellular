@@ -1,12 +1,20 @@
 <?php
 
-namespace DTL\DataTable\Tests\Benchmark;
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace DTL\Cellular\Tests\Benchmark;
 
 use PhpBench\Benchmark;
-use DTL\DataTable\Builder\TableBuilder;
-use DTL\DataTable\Cell;
-use DTL\DataTable\Row;
-use DTL\DataTable\Table;
+use DTL\Cellular\Cell;
+use DTL\Cellular\Row;
+use DTL\Cellular\Table;
 use PhpBench\Benchmark\Iteration;
 
 /**
@@ -62,7 +70,10 @@ class TableBench implements Benchmark
             )),
         ));
 
-        $table->aggregate(function ($table, $row) {
+        $table->partition(function ($row) {
+            return $row['num'];
+        })->fork(function ($table, $newTable) {
+            $row = $newTable->createAndAddRow();
             $row->set('num', $table->getColumn('num')->sum());
         });
     }
@@ -72,20 +83,16 @@ class TableBench implements Benchmark
      */
     public function benchCreateBuilder()
     {
-        TableBuilder::create()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'b')
-                ->set('num', 10)
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'b')
+            ->set('num', 10);
     }
 
     /**
@@ -93,22 +100,21 @@ class TableBench implements Benchmark
      */
     public function benchAggregate()
     {
-        $table = TableBuilder::create()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'a')
-                ->set('num', 10)
-            ->end()
-            ->row()
-                ->set('key', 'b')
-                ->set('num', 10)
-            ->end()
-            ->getTable();
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'a')
+            ->set('num', 10);
+        $table->createAndAddRow()
+            ->set('key', 'b')
+            ->set('num', 10);
 
-        $table->aggregate(function ($table, $row) {
+        $table->partition(function ($row) {
+            return $row['num'];
+        })->fork(function ($table, $newTable) {
+            $row = $newTable->createAndAddRow();
             $row->set('num', $table->getColumn('num')->sum());
         });
     }
