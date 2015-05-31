@@ -18,11 +18,11 @@ namespace DTL\Cellular;
  */
 class Calculator
 {
-
     /**
      * Return the sum of all the given values.
      *
      * @param array $values
+     *
      * @return mixed
      */
     public static function sum($values)
@@ -36,9 +36,10 @@ class Calculator
     }
 
     /**
-     * Return the lowest value contained within the given values
+     * Return the lowest value contained within the given values.
      *
      * @param array $values
+     *
      * @return mixed
      */
     public static function min($values)
@@ -54,9 +55,10 @@ class Calculator
     }
 
     /**
-     * Return the highest value contained within the given values
+     * Return the highest value contained within the given values.
      *
      * @param array $values
+     *
      * @return mixed
      */
     public static function max($values)
@@ -72,9 +74,10 @@ class Calculator
     }
 
     /**
-     * Return the mean (average) value of the given values
+     * Return the mean (average) value of the given values.
      *
      * @param array $values
+     *
      * @return mixed
      */
     public static function mean($values)
@@ -95,6 +98,7 @@ class Calculator
      * Return the median value of the given values.
      *
      * @param array $values
+     *
      * @return mixed
      */
     public static function median($values)
@@ -117,11 +121,12 @@ class Calculator
     }
 
     /**
-     * Return the deviation as a percentage from the given value
+     * Return the deviation as a percentage from the given value.
      *
      * @param mixed $standardValue
      * @param mixed $actualValue
-     * @return integer
+     *
+     * @return int
      */
     public static function deviation($standardValue, $actualValue)
     {

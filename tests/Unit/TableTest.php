@@ -162,7 +162,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should align the table and fill in missing cells in each row
+     * It should align the table and fill in missing cells in each row.
      */
     public function testAlign()
     {
@@ -178,7 +178,7 @@ class TableTest extends AggregateableCase
 
         foreach ($table as $index => $row) {
             $key = 'hello';
-            $this->assertTrue(isset($row[$key]), 'Row ' . $index .' has key ' . $key);
+            $this->assertTrue(isset($row[$key]), 'Row ' . $index . ' has key ' . $key);
         }
     }
 }

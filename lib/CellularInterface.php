@@ -12,7 +12,7 @@
 namespace DTL\Cellular;
 
 /**
- * Cellular interface
+ * Cellular interface.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -22,6 +22,7 @@ interface CellularInterface
      * Return the values of all the cells contained in this collection.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function getValues(array $groups = array());
@@ -31,6 +32,7 @@ interface CellularInterface
      *
      * @param \Closure $closure
      * @param array $groups
+     *
      * @return array
      */
     public function mapValues(\Closure $closure, array $groups = array());

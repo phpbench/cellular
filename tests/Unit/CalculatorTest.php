@@ -27,7 +27,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Sum should accept a Cellular instance
+     * Sum should accept a Cellular instance.
      */
     public function testSumCellular()
     {
@@ -81,7 +81,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should return the median of an odd set of numbers
+     * It should return the median of an odd set of numbers.
      */
     public function testMedianOdd()
     {
@@ -98,7 +98,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should work with Cell objects
+     * It should work with Cell objects.
      */
     public function testSumCell()
     {
@@ -107,7 +107,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should work with Cellular objects
+     * It should work with Cellular objects.
      */
     public function testSumCellularArray()
     {
@@ -121,7 +121,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should throw an exception if the value is not a valid object
+     * It should throw an exception if the value is not a valid object.
      *
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Values must be either of type CellularInterface, Cell or they must be numeric. Got "stdClass"
@@ -130,13 +130,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     {
         Calculator::sum(
             array(
-                new \stdClass,
+                new \stdClass(),
             )
         );
     }
 
     /**
-     * It should throw an exception if the value is not a valid scalar
+     * It should throw an exception if the value is not a valid scalar.
      *
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Values must be either of type CellularInterface, Cell or they must be numeric. Got "string"
@@ -162,7 +162,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It can supply deviation using a Cell as the value
+     * It can supply deviation using a Cell as the value.
      */
     public function testDeviationCell()
     {

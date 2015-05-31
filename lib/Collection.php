@@ -154,6 +154,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      * Override, for example, to enforce type
      *
      * @param mixed $element
+     *
      * @throws InvalidCollectionTypeException
      */
     protected function validateElement($element)

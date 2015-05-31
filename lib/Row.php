@@ -153,7 +153,7 @@ class Row extends Cellular
     }
 
     /**
-     * Order the cells
+     * Order the cells.
      */
     public function order(array $columnNames = array())
     {
