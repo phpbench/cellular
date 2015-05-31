@@ -115,18 +115,19 @@ class Calculator
     /**
      * Return the deviation as a percentage from the given value
      *
-     * @param mixed $targetValue
+     * @param mixed $standardValue
      * @param mixed $actualValue
+     * @return integer
      */
-    public static function deviation($targetValue, $actualValue)
+    public static function deviation($standardValue, $actualValue)
     {
-        if (!is_numeric($targetValue) || !is_numeric($actualValue)) {
+        if (!is_numeric($standardValue) || !is_numeric($actualValue)) {
             throw new \RuntimeException(
                 'Deviation must be passed numeric values.'
             );
         }
 
-        return 100 / $targetValue * ($actualValue - $targetValue);
+        return 100 / $standardValue * ($actualValue - $standardValue);
     }
 
     private static function getValues(array $values)

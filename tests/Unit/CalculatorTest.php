@@ -140,4 +140,15 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /**
+     * It should provide a deviation as a percentage.
+     */
+    public function testDeviation()
+    {
+        $this->assertEquals(0, Calculator::deviation(10, 10));
+        $this->assertEquals(100, Calculator::deviation(10, 20));
+        $this->assertEquals(-10, Calculator::deviation(10, 9));
+        $this->assertEquals(10, Calculator::deviation(10, 11));
+    }
 }
