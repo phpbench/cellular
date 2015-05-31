@@ -16,7 +16,7 @@ namespace DTL\DataTable;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Column extends Cellular
+class Column implements CellularInterface
 {
     /**
      * @var Table
@@ -59,6 +59,30 @@ class Column extends Cellular
         }
 
         return $cells;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getValues(array $groups = array())
+    {
+        $values = array();
+        foreach ($this->getCells($groups) as $column => $cell) {
+            $values[$column] = $cell->getValue();
+        }
+
+        return $values;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function mapValues(\Closure $closure, array $groups = array())
+    {
+        foreach ($this->getCells($groups) as $cell) {
+            $value = $closure($cell);
+            $cell->setValue($value);
+        }
     }
 
     /**

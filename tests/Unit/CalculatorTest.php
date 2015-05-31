@@ -27,6 +27,15 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Sum should accept a Cellular instance
+     */
+    public function testSumCellular()
+    {
+        $sum = Calculator::sum(new Row(array(new Cell(30), new Cell(3))));
+        $this->assertEquals(33, $sum);
+    }
+
+    /**
      * It should return the min.
      */
     public function testMin()
@@ -100,7 +109,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     /**
      * It should work with Cellular objects
      */
-    public function testSumCellular()
+    public function testSumCellularArray()
     {
         $result = Calculator::sum(
             array(
@@ -115,7 +124,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      * It should throw an exception if the value is not a valid object
      *
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Values must be either of type Cellular, Cell or they must be numeric. Got "stdClass"
+     * @expectedExceptionMessage Values must be either of type CellularInterface, Cell or they must be numeric. Got "stdClass"
      */
     public function testSumNonValidObject()
     {
@@ -130,7 +139,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      * It should throw an exception if the value is not a valid scalar
      *
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Values must be either of type Cellular, Cell or they must be numeric. Got "string"
+     * @expectedExceptionMessage Values must be either of type CellularInterface, Cell or they must be numeric. Got "string"
      */
     public function testSumNonValidScalar()
     {
@@ -150,5 +159,13 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(100, Calculator::deviation(10, 20));
         $this->assertEquals(-10, Calculator::deviation(10, 9));
         $this->assertEquals(10, Calculator::deviation(10, 11));
+    }
+
+    /**
+     * It can supply deviation using a Cell as the value
+     */
+    public function testDeviationCell()
+    {
+        $this->assertEquals(-10, Calculator::deviation(10, new Cell(9)));
     }
 }

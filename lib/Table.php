@@ -218,4 +218,29 @@ class Table extends Cellular
     {
         return array();
     }
+
+    /**
+     * Align the table.
+     *
+     * This happens in two passes. The first determines all
+     * of the existing column names. The second orders all
+     * rows based on the determined column names.
+     *
+     * Rows will be filled with NULL valued cells where columns
+     * are missing.
+     */
+    public function align()
+    {
+        $columnNames = array();
+        foreach ($this as $row) {
+            $columnNames = array_merge(
+                $columnNames,
+                $row->getColumnNames()
+            );
+        }
+
+        foreach ($this as $row) {
+            $row->order($columnNames);
+        }
+    }
 }

@@ -80,26 +80,16 @@ class Row extends Cellular
      * Modify or create a cell.
      *
      * @param string $columnName
-     * @param mixed $value
-     * @param array $groups
-     *
-     * @return this
+     * @param Cell $cell
      */
-    public function setCell($columnName, $value, array $groups = array())
+    public function setCell($columnName, Cell $cell)
     {
         $primary = $this->getPrimaryPartition();
-
-        if ($primary->exists($columnName)) {
-            $primary->get($columnName)->setValue($value);
-        } else {
-            $primary->set($columnName, new Cell($value, $groups));
-        }
-
-        return $this;
+        $primary->set($columnName, $cell);
     }
 
     /**
-     * Synonym for setCell.
+     * Modify or create a cell.
      *
      * @param string $columnName
      * @param mixed $value
@@ -109,7 +99,20 @@ class Row extends Cellular
      */
     public function set($columnName, $value, array $groups = array())
     {
-        return $this->setCell($columnName, $value, $groups);
+        $primary = $this->getPrimaryPartition();
+
+        if ($primary->exists($columnName)) {
+            $primary->get($columnName)->setValue($value);
+        } else {
+            $this->setCell($columnName, new Cell($value, $groups));
+        }
+
+        return $this;
+    }
+
+    public function remove($columnName)
+    {
+        unset($this[$columnName]);
     }
 
     /**
@@ -147,5 +150,25 @@ class Row extends Cellular
         }
 
         return $result;
+    }
+
+    /**
+     * Order the cells
+     */
+    public function order(array $columnNames = array())
+    {
+        $this->assertSinglePartition(__METHOD__);
+
+        $partition = $this->getPrimaryPartition();
+        $this->clear();
+
+        foreach ($columnNames as $columnName) {
+            if (!$partition->exists($columnName)) {
+                $this->setCell($columnName, new Cell(null));
+                continue;
+            }
+
+            $this->setCell($columnName, $partition->get($columnName));
+        }
     }
 }

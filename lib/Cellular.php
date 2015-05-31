@@ -16,13 +16,10 @@ namespace DTL\DataTable;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-abstract class Cellular extends Collection
+abstract class Cellular extends Collection implements CellularInterface
 {
     /**
-     * Return the values of all the cells contained in this collection.
-     *
-     * @param array $groups
-     * @return array
+     * {@inheritDoc}
      */
     public function getValues(array $groups = array())
     {
@@ -35,11 +32,7 @@ abstract class Cellular extends Collection
     }
 
     /**
-     * Map a function to each cell value in this collection.
-     *
-     * @param \Closure $closure
-     * @param array $groups
-     * @return array
+     * {@inheritDoc}
      */
     public function mapValues(\Closure $closure, array $groups = array())
     {

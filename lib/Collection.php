@@ -74,6 +74,13 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function getPrimaryPartition()
     {
+        if (!isset($this->partitions[0])) {
+            throw new \RuntimeException(sprintf(
+                'Collection "%s" has no primary partition. Partition indexes: [%s]',
+                get_class($this), implode(', ', array_keys($this->partitions))
+            ));
+        }
+
         return $this->partitions[0];
     }
 
@@ -256,7 +263,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function first()
     {
-        return $this->getPrimaryPartition()->first();
+        return $this->getElements()[0];
     }
 
     /*

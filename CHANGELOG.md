@@ -6,10 +6,10 @@ CHANGELOG
 
 - [BC BREAK] Table, Cell, Row and Column math methods removed. Functionality replaced by new 
   `Calculator` class with static methods.
-
 - [BC BREAK] Removal of builders. Elements are mutable by design (for speed).
 - [BC BREAK] `Aggregated` class renamed to `Cellular`
 - [BC BREAK] `Cell` no longer extends or implements anything
 - New `Collection` base class providing collection functions: `partition`,
   `fork`, `sort`, `evaluate`, `map`, etc.
-- `Table`, `Row` and `Column` are iteratable, countable and array accessible.
+- `Table`, `Row` are iteratable, countable and array accessible.
+- The `avg` function has been renamed to `mean`

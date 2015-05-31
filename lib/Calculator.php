@@ -25,7 +25,7 @@ class Calculator
      * @param array $values
      * @return mixed
      */
-    public static function sum(array $values = array())
+    public static function sum($values)
     {
         $sum = 0;
         foreach (self::getValues($values) as $value) {
@@ -41,7 +41,7 @@ class Calculator
      * @param array $values
      * @return mixed
      */
-    public static function min(array $values = array())
+    public static function min($values)
     {
         $min = null;
         foreach (self::getValues($values) as $value) {
@@ -59,7 +59,7 @@ class Calculator
      * @param array $values
      * @return mixed
      */
-    public static function max(array $values = array())
+    public static function max($values)
     {
         $max = null;
         foreach (self::getValues($values) as $value) {
@@ -77,11 +77,13 @@ class Calculator
      * @param array $values
      * @return mixed
      */
-    public static function mean(array $values = array())
+    public static function mean($values)
     {
         if (empty($values)) {
             return 0;
         }
+
+        $values = self::getValues($values);
 
         $sum = self::sum($values);
         $count = count($values);
@@ -95,11 +97,13 @@ class Calculator
      * @param array $values
      * @return mixed
      */
-    public static function median(array $values = array())
+    public static function median($values)
     {
         if (empty($values)) {
             return 0;
         }
+
+        $values = self::getValues($values);
 
         sort($values);
         $nbValues = count($values);
@@ -121,6 +125,8 @@ class Calculator
      */
     public static function deviation($standardValue, $actualValue)
     {
+        $actualValue = self::getValue($actualValue);
+
         if (!is_numeric($standardValue) || !is_numeric($actualValue)) {
             throw new \RuntimeException(
                 'Deviation must be passed numeric values.'
@@ -130,8 +136,12 @@ class Calculator
         return 100 / $standardValue * ($actualValue - $standardValue);
     }
 
-    private static function getValues(array $values)
+    private static function getValues($values)
     {
+        if ($values instanceof CellularInterface) {
+            return $values->getValues();
+        }
+
         $result = array();
         foreach ($values as $value) {
             if ($value instanceof Cell) {
@@ -139,7 +149,7 @@ class Calculator
                 continue;
             }
 
-            if ($value instanceof Cellular) {
+            if ($value instanceof CellularInterface) {
                 foreach ($value->getValues() as $cellValue) {
                     $result[] = $cellValue;
                 }
@@ -152,11 +162,20 @@ class Calculator
             }
 
             throw new \InvalidArgumentException(sprintf(
-                'Values must be either of type Cellular, Cell or they must be numeric. Got "%s"',
+                'Values must be either of type CellularInterface, Cell or they must be numeric. Got "%s"',
                 is_object($value) ? get_class($value) : gettype($value)
             ));
         }
 
         return $result;
+    }
+
+    private static function getValue($value)
+    {
+        if ($value instanceof Cell) {
+            return $value->getValue();
+        }
+
+        return $value;
     }
 }

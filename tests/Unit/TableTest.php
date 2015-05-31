@@ -81,14 +81,14 @@ class TableTest extends AggregateableCase
     {
         $table = Table::create();
         $table->createAndAddRow()
-            ->setCell(0, 'hello', ['one'])
-            ->setCell(1, 12);
+            ->set(0, 'hello', ['one'])
+            ->set(1, 12);
         $table->createAndAddRow()
-            ->setCell(0, 'hello')
-            ->setCell(1, 12);
+            ->set(0, 'hello')
+            ->set(1, 12);
         $table->createAndAddRow()
-            ->setCell(0, 'goodbye', ['one'])
-            ->setCell(1, 12);
+            ->set(0, 'goodbye', ['one'])
+            ->set(1, 12);
 
         $columnNames = $table->getColumnNames();
         $this->assertEquals(array(0, 1), $columnNames);
@@ -159,5 +159,26 @@ class TableTest extends AggregateableCase
     {
         $table = Table::create();
         $this->assertCount(0, $table->getGroups());
+    }
+
+    /**
+     * It should align the table and fill in missing cells in each row
+     */
+    public function testAlign()
+    {
+        $table = Table::create();
+        $table->createAndAddRow()
+            ->set('hello', 'goodbye')
+            ->set('goodbye', 'hello')
+            ->set('adios', 'bienvenido');
+        $table->createAndAddRow()
+            ->set('aurevior', 'salut')
+            ->set('gutentag', 'auf wiedersehen');
+        $table->align();
+
+        foreach ($table as $index => $row) {
+            $key = 'hello';
+            $this->assertTrue(isset($row[$key]), 'Row ' . $index .' has key ' . $key);
+        }
     }
 }
