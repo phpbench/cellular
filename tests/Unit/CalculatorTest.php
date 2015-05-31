@@ -47,34 +47,37 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     /**
      * It should return the average.
      */
-    public function testAverage()
+    public function testMean()
     {
         $expected = 33 / 7;
-        $this->assertEquals($expected, Calculator::avg(array(2, 2, 2, 2, 2, 20, 3)));
+        $this->assertEquals($expected, Calculator::mean(array(2, 2, 2, 2, 2, 20, 3)));
     }
 
     /**
-     * Average should handle no values.
+     * Mean should handle no values.
      */
-    public function testAverageNoValue()
+    public function testMeanNoValue()
     {
-        $this->assertEquals(0, Calculator::avg(array()));
+        $this->assertEquals(0, Calculator::mean(array()));
     }
 
     /**
-     * It should return the median (floor).
+     * It should return the median of an even set of numbers.
+     * The median should be the average between the middle two numbers.
      */
-    public function testMedianFloor()
+    public function testMedianEven()
     {
-        $this->assertEquals(3, Calculator::median(array(10, 3, 3)));
+        $this->assertEquals(6, Calculator::median(array(9, 5, 7, 3)));
+        $this->assertEquals(8, Calculator::median(array(9, 5, 7, 3, 10, 20)));
     }
 
     /**
-     * It should return the median (ceil).
+     * It should return the median of an odd set of numbers
      */
-    public function testMedianCeil()
+    public function testMedianOdd()
     {
-        $this->assertEquals(10, Calculator::median(array(10, 3, 3), true));
+        $this->assertEquals(3, Calculator::median(array(10, 3, 3), true));
+        $this->assertEquals(3, Calculator::median(array(10, 8, 3, 1, 2), true));
     }
 
     /**

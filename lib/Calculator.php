@@ -72,12 +72,12 @@ class Calculator
     }
 
     /**
-     * Return the average value of the given values
+     * Return the mean (average) value of the given values
      *
      * @param array $values
      * @return mixed
      */
-    public static function avg(array $values = array())
+    public static function mean(array $values = array())
     {
         if (empty($values)) {
             return 0;
@@ -90,28 +90,43 @@ class Calculator
     }
 
     /**
-     * Return the median value of the given values
+     * Return the median value of the given values.
      *
      * @param array $values
-     * @param boolean $ceil
      * @return mixed
      */
-    public static function median(array $values = array(), $ceil = false)
+    public static function median(array $values = array())
     {
         if (empty($values)) {
             return 0;
         }
 
         sort($values);
-        $medianIndex = count($values) / 2;
+        $nbValues = count($values);
+        $middleIndex = $nbValues / 2;
 
-        if ($ceil) {
-            $medianIndex = ceil($medianIndex);
-        } else {
-            $medianIndex = floor($medianIndex);
+        if (count($values) % 2 == 1) {
+            return $values[ceil($middleIndex) - 1];
         }
 
-        return $values[$medianIndex];
+        return ($values[$middleIndex - 1] + $values[$middleIndex]) / 2;
+    }
+
+    /**
+     * Return the deviation as a percentage from the given value
+     *
+     * @param mixed $targetValue
+     * @param mixed $actualValue
+     */
+    public static function deviation($targetValue, $actualValue)
+    {
+        if (!is_numeric($targetValue) || !is_numeric($actualValue)) {
+            throw new \RuntimeException(
+                'Deviation must be passed numeric values.'
+            );
+        }
+
+        return 100 / $targetValue * ($actualValue - $targetValue);
     }
 
     private static function getValues(array $values)
