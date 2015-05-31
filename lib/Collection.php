@@ -11,6 +11,8 @@
 
 namespace DTL\DataTable;
 
+use DTL\DataTable\Exception\InvalidCollectionTypeException;
+
 /**
  * Base partitioned collection.
  *
@@ -139,9 +141,13 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * Called each time an element is added to the collection.
      *
+     * Should throw an InvalidCollectionTypeException if the element is
+     * not valid.
+     *
      * Override, for example, to enforce type
      *
      * @param mixed $element
+     * @throws InvalidCollectionTypeException
      */
     protected function validateElement($element)
     {

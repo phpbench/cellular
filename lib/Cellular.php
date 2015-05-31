@@ -19,7 +19,10 @@ namespace DTL\DataTable;
 abstract class Cellular extends Collection
 {
     /**
-     * {@inheritDoc}
+     * Return the values of all the cells contained in this collection.
+     *
+     * @param array $groups
+     * @return array
      */
     public function getValues(array $groups = array())
     {
@@ -32,7 +35,11 @@ abstract class Cellular extends Collection
     }
 
     /**
-     * {@inheritDoc}
+     * Map a function to each cell value in this collection.
+     *
+     * @param \Closure $closure
+     * @param array $groups
+     * @return array
      */
     public function mapValues(\Closure $closure, array $groups = array())
     {

@@ -12,6 +12,8 @@
 namespace DTL\DataTable\Tests\Unit;
 
 use DTL\DataTable\Calculator;
+use DTL\DataTable\Cell;
+use DTL\DataTable\Row;
 
 class CalculatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,5 +83,58 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     public function testMedianNoValues()
     {
         $this->assertEquals(0, Calculator::median(array()));
+    }
+
+    /**
+     * It should work with Cell objects
+     */
+    public function testSumCell()
+    {
+        $result = Calculator::sum(array(new Cell(12), new Cell(12)));
+        $this->assertEquals(24, $result);
+    }
+
+    /**
+     * It should work with Cellular objects
+     */
+    public function testSumCellular()
+    {
+        $result = Calculator::sum(
+            array(
+                new Row(array(new Cell(12), new Cell(12))),
+                new Row(array(new Cell(12), new Cell(12))),
+            )
+        );
+        $this->assertEquals(48, $result);
+    }
+
+    /**
+     * It should throw an exception if the value is not a valid object
+     *
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Values must be either of type Cellular, Cell or they must be numeric. Got "stdClass"
+     */
+    public function testSumNonValidObject()
+    {
+        Calculator::sum(
+            array(
+                new \stdClass,
+            )
+        );
+    }
+
+    /**
+     * It should throw an exception if the value is not a valid scalar
+     *
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Values must be either of type Cellular, Cell or they must be numeric. Got "string"
+     */
+    public function testSumNonValidScalar()
+    {
+        Calculator::sum(
+            array(
+                'hello',
+            )
+        );
     }
 }
