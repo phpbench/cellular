@@ -142,6 +142,21 @@ class TableTest extends AggregateableCase
     }
 
     /**
+     * It should throw an exception for an unknown row
+     *
+     * @expectedException \OutOfRangeException
+     * @expectedExceptionMessage Row with index "5" does not exist. Must be >=0 < 2
+     */
+    public function testGetRowNotExist()
+    {
+        $table = Table::create();
+        $table->createAndAddRow();
+        $table->createAndAddRow();
+
+        $table->getRow(5);
+    }
+
+    /**
      * It should return a rows by groups.
      */
     public function testGetRowByGroups()

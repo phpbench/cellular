@@ -268,8 +268,9 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
         if (!$elements) {
             return null;
         }
+        $elements = array_values($elements);
 
-        return array_values($elements)[0];
+        return $elements[0];
     }
 
     /*

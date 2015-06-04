@@ -84,6 +84,21 @@ class WorkspaceTest extends AggregateableCase
     }
 
     /**
+     * It should thtable an exception for an unknown table
+     *
+     * @expectedException \OutOfRangeException
+     * @expectedExceptionMessage Table with index "5" does not exist. Must be >=0 < 2
+     */
+    public function testGetTableNotExist()
+    {
+        $workspace = Workspace::create();
+        $workspace->createAndAddTable();
+        $workspace->createAndAddTable();
+
+        $workspace->getTable(5);
+    }
+
+    /**
      * It should return a rows by groups.
      */
     public function testGetTableByGroups()

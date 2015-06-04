@@ -227,10 +227,10 @@ class Table extends Cellular
      */
     public function getRow($index)
     {
-        if (!isset($this->getElements()[$index])) {
+        if (!isset($this[$index])) {
             throw new \OutOfRangeException(sprintf(
                 'Row with index "%s" does not exist. Must be >=0 < %d',
-                $index, count($this->getElements())
+                $index, count($this)
             ));
         }
 

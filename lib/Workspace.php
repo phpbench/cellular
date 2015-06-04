@@ -100,10 +100,10 @@ class Workspace extends Cellular
      */
     public function getTable($index)
     {
-        if (!isset($this->getElements()[$index])) {
+        if (!isset($this[$index])) {
             throw new \OutOfRangeException(sprintf(
                 'Table with index "%s" does not exist. Must be >=0 < %d',
-                $index, count($this->getElements())
+                $index, count($this)
             ));
         }
 
