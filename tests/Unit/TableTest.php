@@ -183,7 +183,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should be able to have a title
+     * It should be able to have a title.
      */
     public function testTitle()
     {
@@ -194,7 +194,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * Its should be able to have a description
+     * Its should be able to have a description.
      */
     public function testDescription()
     {

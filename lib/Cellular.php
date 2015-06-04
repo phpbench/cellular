@@ -27,6 +27,7 @@ abstract class Cellular extends Collection implements CellularInterface
      * Return the values of all the cells contained in this cellular instance.
      *
      * @param array $groups
+     *
      * @return array
      */
     public function getValues(array $groups = array())
@@ -50,9 +51,10 @@ abstract class Cellular extends Collection implements CellularInterface
     }
 
     /**
-     * Set the groups to which this cellular instance belongs
+     * Set the groups to which this cellular instance belongs.
      *
      * @param array $groups
+     *
      * @return this
      */
     public function setGroups($groups)
@@ -67,6 +69,7 @@ abstract class Cellular extends Collection implements CellularInterface
      *
      * @param \Closure
      * @param array $groups
+     *
      * @return this
      */
     public function mapValues(\Closure $closure, array $groups = array())

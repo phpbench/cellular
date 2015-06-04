@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Table Data package
+ *
+ * (c) Daniel Leech <daniel@dantleech.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace DTL\Cellular\Tests\Unit;
 
 use DTL\Cellular\Workspace;
@@ -14,7 +23,7 @@ class WorkspaceTest extends AggregateableCase
         return new Workspace(array(
             new Table(array(
                 parent::getRowAggregate(),
-            ))
+            )),
         ));
     }
 
@@ -86,7 +95,7 @@ class WorkspaceTest extends AggregateableCase
     }
 
     /**
-     * It returns empty for groups (workspaces cannot have groups)
+     * It returns empty for groups (workspaces cannot have groups).
      */
     public function testGetGroups()
     {

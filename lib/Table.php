@@ -41,46 +41,50 @@ class Table extends Cellular
     }
 
     /**
-     * Return the table's title
+     * Return the table's title.
      *
      * @return string
      */
-    public function getTitle() 
+    public function getTitle()
     {
         return $this->title;
     }
 
     /**
-     * Set the table's title
+     * Set the table's title.
      *
      * @param string $title
+     *
      * @return this
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
     /**
-     * Return the table's description
+     * Return the table's description.
      *
      * @return string
      */
-    public function getDescription() 
+    public function getDescription()
     {
         return $this->description;
     }
-    
+
     /**
-     * Set the table's description
+     * Set the table's description.
      *
      * @param string $title
+     *
      * @return this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
