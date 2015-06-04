@@ -264,7 +264,12 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function first()
     {
-        return $this->getElements()[0];
+        $elements = $this->getElements();
+        if (!$elements) {
+            return null;
+        }
+
+        return array_values($elements)[0];
     }
 
     /*
