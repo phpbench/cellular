@@ -212,14 +212,6 @@ class Table extends Cellular
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-        return array();
-    }
-
-    /**
      * Align the table.
      *
      * This happens in two passes. The first determines all
