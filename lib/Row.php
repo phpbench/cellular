@@ -21,11 +21,6 @@ use DTL\Cellular\Exception\InvalidCollectionTypeException;
 class Row extends Cellular
 {
     /**
-     * @var string[]
-     */
-    private $groups;
-
-    /**
      * {@inheritDoc}
      */
     protected function validateElement($element)
@@ -33,21 +28,6 @@ class Row extends Cellular
         if (!$element instanceof Cell) {
             throw new InvalidCollectionTypeException($this, $element);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    public function setGroups($groups)
-    {
-        $this->groups = $groups;
-
-        return $this;
     }
 
     /**
