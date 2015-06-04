@@ -181,4 +181,26 @@ class TableTest extends AggregateableCase
             $this->assertTrue(isset($row[$key]), 'Row ' . $index . ' has key ' . $key);
         }
     }
+
+    /**
+     * It should be able to have a title
+     */
+    public function testTitle()
+    {
+        $table = Table::create()
+            ->setTitle('Hai')
+            ->setTitle('Hai');
+        $this->assertEquals('Hai', $table->getTitle());
+    }
+
+    /**
+     * Its should be able to have a description
+     */
+    public function testDescription()
+    {
+        $table = Table::create()
+            ->setDescription('Hai')
+            ->setDescription('Hai');
+        $this->assertEquals('Hai', $table->getDescription());
+    }
 }

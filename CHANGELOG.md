@@ -14,3 +14,4 @@ CHANGELOG
 - `Table`, `Row` are iteratable, countable and array accessible.
 - The `avg` function has been renamed to `mean`.
 - Added `Workspace` cellular instance which contains instances of `Table`.
+- Tables can have titles and descriptions

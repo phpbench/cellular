@@ -21,6 +21,16 @@ use DTL\Cellular\Exception\InvalidCollectionTypeException;
 class Table extends Cellular
 {
     /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
      * {@inheritDoc}
      */
     protected function validateElement($element)
@@ -28,6 +38,50 @@ class Table extends Cellular
         if (!$element instanceof Row) {
             throw new InvalidCollectionTypeException($this, $element);
         }
+    }
+
+    /**
+     * Return the table's title
+     *
+     * @return string
+     */
+    public function getTitle() 
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set the table's title
+     *
+     * @param string $title
+     * @return this
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * Return the table's description
+     *
+     * @return string
+     */
+    public function getDescription() 
+    {
+        return $this->description;
+    }
+    
+    /**
+     * Set the table's description
+     *
+     * @param string $title
+     * @return this
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+        return $this;
     }
 
     /**
