@@ -55,7 +55,7 @@ class Table extends Cellular
      *
      * @param string $title
      *
-     * @return this
+     * @return Table
      */
     public function setTitle($title)
     {
@@ -79,7 +79,7 @@ class Table extends Cellular
      *
      * @param string $title
      *
-     * @return this
+     * @return Table
      */
     public function setDescription($description)
     {

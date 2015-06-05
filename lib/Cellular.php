@@ -43,7 +43,7 @@ abstract class Cellular extends Collection implements CellularInterface, GroupIn
      * @param \Closure
      * @param array $groups
      *
-     * @return this
+     * @return Cellular
      */
     public function mapValues(\Closure $closure, array $groups = array())
     {

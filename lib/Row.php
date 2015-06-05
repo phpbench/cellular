@@ -75,7 +75,7 @@ class Row extends Cellular
      * @param mixed $value
      * @param array $groups
      *
-     * @return this
+     * @return Row
      */
     public function set($columnName, $value, array $groups = array())
     {

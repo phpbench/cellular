@@ -30,7 +30,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      *
      * @param mixed[] $elements
      *
-     * @return this
+     * @return Collection
      */
     public static function create(array $elements = array())
     {
@@ -119,7 +119,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     /**
      * Duplicate (clone) the table.
      *
-     * @return this
+     * @return Collection
      */
     public function duplicate()
     {
@@ -244,7 +244,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      *
      * @param \Closure $closure
      *
-     * @return this
+     * @return Collection
      */
     public function fork(\Closure $closure)
     {
