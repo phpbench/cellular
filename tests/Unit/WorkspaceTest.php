@@ -84,7 +84,7 @@ class WorkspaceTest extends AggregateableCase
     }
 
     /**
-     * It should thtable an exception for an unknown table
+     * It should thtable an exception for an unknown table.
      *
      * @expectedException \OutOfRangeException
      * @expectedExceptionMessage Table with index "5" does not exist. Must be >=0 < 2

@@ -25,7 +25,7 @@ class CellTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It can determine if it belongs to a given group
+     * It can determine if it belongs to a given group.
      */
     public function testInGroup()
     {

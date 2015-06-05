@@ -142,7 +142,7 @@ class TableTest extends AggregateableCase
     }
 
     /**
-     * It should throw an exception for an unknown row
+     * It should throw an exception for an unknown row.
      *
      * @expectedException \OutOfRangeException
      * @expectedExceptionMessage Row with index "5" does not exist. Must be >=0 < 2

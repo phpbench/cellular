@@ -39,7 +39,7 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should get and set groups
+     * It should get and set groups.
      */
     public function testGetSetGroups()
     {
@@ -49,7 +49,7 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should say if it is in a given group or not
+     * It should say if it is in a given group or not.
      */
     public function testInGroup()
     {
