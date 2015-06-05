@@ -16,18 +16,14 @@ namespace DTL\Cellular;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-abstract class Cellular extends Collection implements CellularInterface
+abstract class Cellular extends Collection implements CellularInterface, GroupInterface
 {
-    /**
-     * @var array
-     */
-    protected $groups = array();
+    use GroupTrait;
 
     /**
      * Return the values of all the cells contained in this cellular instance.
      *
      * @param array $groups
-     *
      * @return array
      */
     public function getValues(array $groups = array())
@@ -41,35 +37,10 @@ abstract class Cellular extends Collection implements CellularInterface
     }
 
     /**
-     * Return all of the groups to which this cellular instance belongs.
-     *
-     * @return array
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
-     * Set the groups to which this cellular instance belongs.
-     *
-     * @param array $groups
-     *
-     * @return this
-     */
-    public function setGroups($groups)
-    {
-        $this->groups = $groups;
-
-        return $this;
-    }
-
-    /**
      * Use a closure to assign a value to each cell in this cellular instance.
      *
      * @param \Closure
      * @param array $groups
-     *
      * @return this
      */
     public function mapValues(\Closure $closure, array $groups = array())

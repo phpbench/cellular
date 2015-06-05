@@ -14,4 +14,8 @@ CHANGELOG
 - `Table`, `Row` are iteratable, countable and array accessible.
 - The `avg` function has been renamed to `mean`.
 - Added `Workspace` cellular instance which contains instances of `Table`.
-- Tables can have titles and descriptions
+- Tables can have titles and descriptions.
+- Dropped support for PHP 5.3
+- `Cell` and `Cellular` instances now use the `GroupTrait`, which introduces
+  the `inGroup` method.
+

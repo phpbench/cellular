@@ -38,6 +38,27 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, array_values($aggregate->getValues(['x'])));
     }
 
+    /**
+     * It should get and set groups
+     */
+    public function testGetSetGroups()
+    {
+        $aggregate = $this->getAggregate();
+        $aggregate->setGroups(array('one', 'two'));
+        $this->assertEquals(array('one', 'two'), $aggregate->getGroups());
+    }
+
+    /**
+     * It should say if it is in a given group or not
+     */
+    public function testInGroup()
+    {
+        $aggregate = $this->getAggregate();
+        $aggregate->setGroups(array('one', 'two'));
+        $this->assertTrue($aggregate->inGroup('one'));
+        $this->assertFalse($aggregate->inGroup('vache'));
+    }
+
     protected function getRowAggregate()
     {
         return new Row(array(

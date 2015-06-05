@@ -141,12 +141,4 @@ class Workspace extends Cellular
 
         return $result;
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-        return array();
-    }
 }
