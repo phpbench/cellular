@@ -18,10 +18,20 @@ class CellTest extends \PHPUnit_Framework_TestCase
     /**
      * It can get its groups.
      */
-    public function testInGroup()
+    public function testGetGroups()
     {
         $cell = new Cell('test', array('foo'));
         $this->assertEquals(array('foo'), $cell->getGroups());
+    }
+
+    /**
+     * It can determine if it belongs to a given group.
+     */
+    public function testInGroup()
+    {
+        $cell = new Cell('test', array('foo'));
+        $this->assertTrue($cell->inGroup('foo'));
+        $this->assertFalse($cell->inGroup('aww'));
     }
 
     /**

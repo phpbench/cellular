@@ -16,12 +16,9 @@ namespace DTL\Cellular;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Cell
+class Cell implements GroupInterface
 {
-    /**
-     * @var array
-     */
-    private $groups;
+    use GroupTrait;
 
     /**
      * @var mixed
@@ -36,14 +33,6 @@ class Cell
     {
         $this->value = $value;
         $this->groups = $groups;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getGroups()
-    {
-        return $this->groups;
     }
 
     /**
