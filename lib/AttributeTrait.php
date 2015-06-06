@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Table Data package
- *
- * (c) Daniel Leech <daniel@dantleech.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace DTL\Cellular;
 
 trait AttributeTrait
@@ -44,5 +35,21 @@ trait AttributeTrait
     public function setAttribute($name, $value)
     {
         $this->attributes[$name] = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 }

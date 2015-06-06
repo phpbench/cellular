@@ -71,6 +71,16 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $aggregate->getAttribute('foo'));
     }
 
+    /**
+     * It should set all attributes
+     */
+    public function testSetAllAttributes()
+    {
+        $aggregate = $this->getAggregate();
+        $aggregate->setAttributes(array('foo' => 'bar', 'bar' => 'foo'));
+        $this->assertEquals(array('foo' => 'bar', 'bar' => 'foo'), $aggregate->getAttributes());
+    }
+
     protected function getRowAggregate()
     {
         return new Row(array(

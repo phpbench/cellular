@@ -36,4 +36,18 @@ interface AttributeInterface
      * @param mixed $value
      */
     public function setAttribute($name, $value);
+
+    /**
+     * Set all the attributes
+     *
+     * @param mixed[] $attributes
+     */
+    public function setAttributes(array $attributes);
+
+    /**
+     * Get all attributes
+     *
+     * @return mixed[]
+     */
+    public function getAttributes();
 }
