@@ -167,8 +167,8 @@ class Calculator
             }
 
             throw new \InvalidArgumentException(sprintf(
-                'Values must be either of type CellularInterface, Cell or they must be numeric. Got "%s"',
-                is_object($value) ? get_class($value) : gettype($value)
+                'Values must be either of type CellularInterface, Cell or they must be numeric. Got "%s" : %s',
+                is_object($value) ? get_class($value) : gettype($value), print_r($value, true)
             ));
         }
 
