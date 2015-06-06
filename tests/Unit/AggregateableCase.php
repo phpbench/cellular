@@ -59,6 +59,18 @@ abstract class AggregateableCase extends \PHPUnit_Framework_TestCase
         $this->assertFalse($aggregate->inGroup('vache'));
     }
 
+    /**
+     * It should get and set attributes.
+     */
+    public function testSetGetAttribute()
+    {
+        $aggregate = $this->getAggregate();
+        $aggregate->setAttribute('foo', 'bar');
+        $this->assertTrue($aggregate->hasAttribute('foo'));
+        $this->assertFalse($aggregate->hasAttribute('baz'));
+        $this->assertEquals('bar', $aggregate->getAttribute('foo'));
+    }
+
     protected function getRowAggregate()
     {
         return new Row(array(

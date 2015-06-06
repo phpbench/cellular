@@ -16,9 +16,10 @@ namespace DTL\Cellular;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-abstract class Cellular extends Collection implements CellularInterface, GroupInterface
+abstract class Cellular extends Collection implements CellularInterface, GroupInterface, AttributeInterface
 {
     use GroupTrait;
+    use AttributeTrait;
 
     /**
      * Return the values of all the cells contained in this cellular instance.

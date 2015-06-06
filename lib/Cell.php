@@ -16,9 +16,10 @@ namespace DTL\Cellular;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class Cell implements GroupInterface
+class Cell implements GroupInterface, AttributeInterface
 {
     use GroupTrait;
+    use AttributeTrait;
 
     /**
      * @var mixed
