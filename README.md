@@ -173,6 +173,19 @@ $sum = $table->evaluate(function ($row, $lastValue) {
 The callback is passed the element and the previous result. The initial result
 is given as the second argument to `evaluate`.
 
+Setting Attributes
+------------------
+
+It is possible to set attributes on `Cell` and `Cellular` instances. This is
+useful when you need to store metadata about the source of the data before it
+was transformed into cellular form.
+
+````php
+$table->setAttribute('foo', 'bar');
+$table->getAttribute('foo');
+$table->hasAttribute('foo');
+````
+
 Other methods
 -------------
 

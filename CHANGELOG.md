@@ -18,4 +18,5 @@ CHANGELOG
 - Dropped support for PHP 5.3
 - `Cell` and `Cellular` instances now use the `GroupTrait`, which introduces
   the `inGroup` method.
-
+- `Cell` and `Cellular` instances now use the `AttributeTrait`, which allows
+  arbitrary attributes to be set on them.
