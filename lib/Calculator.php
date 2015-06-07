@@ -89,6 +89,11 @@ class Calculator
         $values = self::getValues($values);
 
         $sum = self::sum($values);
+
+        if (0 === $sum) {
+            return 0;
+        }
+
         $count = count($values);
 
         return $sum / $count;

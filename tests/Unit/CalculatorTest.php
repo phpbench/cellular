@@ -71,6 +71,14 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Mean should return 0 if the sum of all values is zero
+     */
+    public function testMeanAllZeros()
+    {
+        $this->assertEquals(0, Calculator::mean(array(0, 0, 0)));
+    }
+
+    /**
      * It should return the median of an even set of numbers.
      * The median should be the average between the middle two numbers.
      */
