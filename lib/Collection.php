@@ -237,16 +237,18 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Fork a new instance based on each partition.
+     * Aggregate the partions back to a single partition using
+     * the given closure.
      *
      * The closure will be passed each partition in turn and can
-     * modify a new instance of this collection.
+     * modify a new instance of this collection. The partition from
+     * the new instance will become the new partition for this collection.
      *
      * @param \Closure $closure
      *
      * @return Collection
      */
-    public function fork(\Closure $closure)
+    public function aggregate(\Closure $closure)
     {
         $newInstance = new static(array());
         foreach ($this->partitions as $partition) {
@@ -254,7 +256,9 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
             $closure($collection, $newInstance);
         }
 
-        return $newInstance;
+        $this->partitions = array($newInstance->getPrimaryPartition());
+
+        return $this;
     }
 
     /**
@@ -315,7 +319,7 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
      */
     public function filter(\Closure $closure)
     {
-        return new static(array_filter($this->getElements(), $closure));
+        return new static(array_filter($this->getElements(), $closure, ARRAY_FILTER_USE_BOTH));
     }
 
     /**

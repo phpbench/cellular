@@ -122,16 +122,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * It flow partitions into a new instance.
      */
-    public function testFork()
+    public function testAggregate()
     {
         $collection = new Collection(array('one', 'two', 'three'), array('four', 'five', 'six'));
-        $newInstance = $collection->fork(function ($partition, $newInstance) {
+        $collection->aggregate(function ($partition, $newInstance) {
             $newInstance[] = $partition->first();
         });
 
         $this->assertEquals(array(
             'one', 'four',
-        ), $newInstance->getElements());
+        ), $collection->getElements());
     }
 
     /**
@@ -201,7 +201,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             return $row1['class'] > $row2['class'];
         })->partition(function ($row) {
             return $row['class'];
-        })->fork(function ($partition, $instance) {
+        })->aggregate(function ($partition, $instance) {
             $instance[] = $partition->evaluate(function ($row, $value) {
                 return $value + $row['a'];
             }, 0);

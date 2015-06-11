@@ -137,6 +137,10 @@ class Calculator
     {
         $actualValue = self::getValue($actualValue);
 
+        if (0 === $standardValue) {
+            return $actualValue;
+        }
+
         if (!is_numeric($standardValue) || !is_numeric($actualValue)) {
             throw new \RuntimeException(
                 'Deviation must be passed numeric values.'
