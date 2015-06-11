@@ -10,7 +10,7 @@ CHANGELOG
 - [BC BREAK] `Aggregated` class renamed to `Cellular`.
 - [BC BREAK] `Cell` no longer extends or implements anything.
 - New `Collection` base class providing collection functions: `partition`,
-  `fork`, `sort`, `evaluate`, `map`, etc.
+  `aggregate`, `sort`, `evaluate`, `map`, etc.
 - `Table`, `Row` are iteratable, countable and array accessible.
 - The `avg` function has been renamed to `mean`.
 - Added `Workspace` cellular instance which contains instances of `Table`.

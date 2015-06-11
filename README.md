@@ -116,21 +116,19 @@ Partitioning and Forking
 
 - `partition`: Internally divide the collection of elements according to a
   given callback.
-- `fork`: Fork the table into a new table. The callback is called once for
-  each partition.
+- `aggregate`: Aggregate the partitions of a table back to a single partition.
 
-This is useful for generating new tables based on aggregated values of an
-original table.
+This is useful for creating summaries from multiple tables or rows:
 
 For example:
 
 ````php
-$newTable = $table
+$table
     ->partition(function ($row) {
         return $row['class'];
     })
-    ->fork(function ($table, $newTable) use ($cols, &$newCols, $options, $functions) {
-        $newTable->createAndAddRow()
+    ->partition(function ($table, $newInstance) use ($cols, &$newCols, $options, $functions) {
+        $newInstance->createAndAddRow()
             ->set(
                 'number', 
                 Calculator::sum($table->getColumn('number'))
@@ -138,13 +136,10 @@ $newTable = $table
     });
 ````
 
-The above example will "partition" the original table by the `class` column.
-Internally a new table will be created each time the `partition` callback
-changes its value (note that in applicable cases you will need to sort the
-table).
-
-It will then `fork` a new table. The callback is passed a each partition table
-in turn and also the new table instance.
+The callback is passed each partition in turn alongisde a new instance
+of the collection class. The callback's responsiblity is to add new rows to
+the new instance, the primary partition of which will become the new primary
+partition for the collection upon which the operation is performed.
 
 The result will be anagous to the following SQL: `SELECT SUM(number) FROM table GROUP BY class`.
 
