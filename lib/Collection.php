@@ -66,6 +66,16 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
+     * Copy (clone) this collection.
+     *
+     * @return Collection
+     */
+    public function copy()
+    {
+        return clone $this;
+    }
+
+    /**
      * Return the primary partition.
      *
      * NOTE: There should always be a primary partition.
@@ -114,16 +124,6 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
         }
 
         return $elements;
-    }
-
-    /**
-     * Duplicate (clone) the table.
-     *
-     * @return Collection
-     */
-    public function duplicate()
-    {
-        return clone $this;
     }
 
     /**
@@ -312,14 +312,22 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return a new instance of this collection with only the elements from this
-     * instance which satisft the given filter.
+     * Filter elements in this collection.
+     *
+     * The closure should return `true` for elements which should
+     * be retained.
      *
      * @param \Closure $closure
      */
     public function filter(\Closure $closure)
     {
-        return new static(array_filter($this->getElements(), $closure, ARRAY_FILTER_USE_BOTH));
+        foreach ($this as $key => $element) {
+            if (false === $closure($element, $key)) {
+                unset($this[$key]);
+            }
+        }
+
+        return $this;
     }
 
     /**

@@ -291,28 +291,28 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should duplicate itself.
+     * It should provide a copy of itself
      */
-    public function testDuplicate()
+    public function testCopy()
     {
         $collection = new Collection(array(1, 2));
-        $duplicate = $collection->duplicate();
-        $this->assertNotSame($collection, $duplicate);
-        $this->assertEquals(array(1, 2), $duplicate->getElements());
+        $copy = $collection->copy();
+        $this->assertNotSame($collection, $copy);
+        $this->assertEquals(array(1, 2), $copy->getElements());
     }
 
     /**
-     * It should duplicate with objects in the collection.
+     * It should provide a copy of itself with elements
      */
-    public function testDuplicateWithObject()
+    public function testCopyWithObject()
     {
         $object1 = new \stdClass();
         $object2 = new \stdClass();
 
         $collection = new Collection(array($object1, $object2));
-        $duplicate = $collection->duplicate();
-        $this->assertNotSame($collection, $duplicate);
-        $elements = $duplicate->getElements();
+        $copy = $collection->copy();
+        $this->assertNotSame($collection, $copy);
+        $elements = $copy->getElements();
         $this->assertContainsOnlyInstancesOf('stdClass', $elements);
         $this->assertCount(2, $elements);
         $this->assertNotSame($elements[0], $object1);
