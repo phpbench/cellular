@@ -66,6 +66,16 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
+     * Copy (clone) this collection.
+     *
+     * @return Collection
+     */
+    public function copy()
+    {
+        return clone $this;
+    }
+
+    /**
      * Return the primary partition.
      *
      * NOTE: There should always be a primary partition.
@@ -114,16 +124,6 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
         }
 
         return $elements;
-    }
-
-    /**
-     * Duplicate (clone) the table.
-     *
-     * @return Collection
-     */
-    public function duplicate()
-    {
-        return clone $this;
     }
 
     /**
@@ -237,16 +237,18 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Fork a new instance based on each partition.
+     * Aggregate the partions back to a single partition using
+     * the given closure.
      *
      * The closure will be passed each partition in turn and can
-     * modify a new instance of this collection.
+     * modify a new instance of this collection. The partition from
+     * the new instance will become the new partition for this collection.
      *
      * @param \Closure $closure
      *
      * @return Collection
      */
-    public function fork(\Closure $closure)
+    public function aggregate(\Closure $closure)
     {
         $newInstance = new static(array());
         foreach ($this->partitions as $partition) {
@@ -254,7 +256,9 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
             $closure($collection, $newInstance);
         }
 
-        return $newInstance;
+        $this->partitions = array($newInstance->getPrimaryPartition());
+
+        return $this;
     }
 
     /**
@@ -308,14 +312,22 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
-     * Return a new instance of this collection with only the elements from this
-     * instance which satisft the given filter.
+     * Filter elements in this collection.
+     *
+     * The closure should return `true` for elements which should
+     * be retained.
      *
      * @param \Closure $closure
      */
     public function filter(\Closure $closure)
     {
-        return new static(array_filter($this->getElements(), $closure));
+        foreach ($this as $key => $element) {
+            if (false === $closure($element, $key)) {
+                unset($this[$key]);
+            }
+        }
+
+        return $this;
     }
 
     /**

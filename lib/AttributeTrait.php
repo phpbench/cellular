@@ -11,10 +11,10 @@ trait AttributeTrait
      */
     public function getAttribute($name)
     {
-        if (!isset($this->attributes[$name])) {
+        if (!array_key_exists($name, $this->attributes)) {
             throw new \InvalidArgumentException(sprintf(
                 'Attribute with name "%s" does not exist. Known attributes: "%s"',
-                $name, implode('", "', $this->attributes)
+                $name, implode('", "', array_keys($this->attributes))
             ));
         }
 

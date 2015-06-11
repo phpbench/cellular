@@ -104,7 +104,7 @@ class Row extends Cellular
             return $this->getElements();
         }
 
-        return $this->filter(function (Cell $cell) use ($groups) {
+        return array_filter($this->getElements(), function (Cell $cell) use ($groups) {
             foreach ($groups as $group) {
                 if (in_array($group, $cell->getGroups())) {
                     return true;
@@ -112,7 +112,7 @@ class Row extends Cellular
             }
 
             return false;
-        })->getElements();
+        });
     }
 
     /**
