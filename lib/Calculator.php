@@ -90,7 +90,7 @@ class Calculator
 
         $sum = self::sum($values);
 
-        if (0 === $sum) {
+        if (0 == $sum) {
             return 0;
         }
 
@@ -137,7 +137,7 @@ class Calculator
     {
         $actualValue = self::getValue($actualValue);
 
-        if (0 === $standardValue) {
+        if (0 == $standardValue) {
             return $actualValue;
         }
 

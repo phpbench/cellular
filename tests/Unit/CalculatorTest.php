@@ -167,6 +167,9 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(100, Calculator::deviation(10, 20));
         $this->assertEquals(-10, Calculator::deviation(10, 9));
         $this->assertEquals(10, Calculator::deviation(10, 11));
+        $this->assertEquals(11, Calculator::deviation(0, 11));
+        $this->assertEquals(-100, Calculator::deviation(10, 0));
+        $this->assertEquals(0, Calculator::deviation(0, 0));
     }
 
     /**

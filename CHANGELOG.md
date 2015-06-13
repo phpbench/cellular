@@ -1,8 +1,17 @@
 CHANGELOG
 =========
 
+dev-master
+----------
+
+### Bugs
+
+- Division by zero error on HHVM
+
 0.2
 ---
+
+### Features
 
 - [BC BREAK] Table, Cell, Row and Column math methods removed. Functionality replaced by new 
   `Calculator` class with static methods.
