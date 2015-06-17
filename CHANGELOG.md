@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-dev-master
-----------
+0.3
+---
 
 ### Bugs
 
