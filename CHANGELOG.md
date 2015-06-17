@@ -8,6 +8,10 @@ dev-master
 
 - Division by zero error on HHVM
 
+### Features
+
+- Use mergesort algorithm for sorting instead of usort (preserve order)
+
 0.2
 ---
 

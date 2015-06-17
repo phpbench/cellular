@@ -11,6 +11,8 @@
 
 namespace DTL\Cellular;
 
+use DTL\Cellular\Util;
+
 /**
  * Represents an partition of a collection.
  *
@@ -130,7 +132,7 @@ class Partition
      */
     public function sort(\Closure $closure)
     {
-        usort($this->elements, $closure);
+        Util::mergesort($this->elements, $closure);
     }
 
     /**
