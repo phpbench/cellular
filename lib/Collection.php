@@ -237,6 +237,56 @@ class Collection implements \IteratorAggregate, \Countable, \ArrayAccess
     }
 
     /**
+     * Materialize each partition of the child cellular instances
+     * into a concrete instance.
+     *
+     * @return Collection
+     */
+    public function materialize()
+    {
+        $cells = array();
+        foreach ($this as $cell) {
+            foreach ($cell->getPartitions() as $partition) {
+                $cells[] = $cell->create($partition->getElements());
+            }
+        }
+        $this->replace($cells);
+        return $this;
+    }
+
+    /**
+     * Aggregate all cells into a single cell.
+     *
+     * @return Collection
+     */
+    public function compact()
+    {
+        $newCell = null;
+        foreach ($this as $cell) {
+            if (null === $newCell) {
+                $newCell = $cell->create();
+            }
+
+            foreach ($cell as $element) {
+                $newCell[] = $element;
+            }
+        }
+
+        $this->replace(array($newCell));
+    }
+
+    /**
+     * Replace the elements in the collection
+     *
+     * @param array $elements
+     * @return Collection
+     */
+    public function replace($elements)
+    {
+        $this->partitions = array(new Partition($elements));
+    }
+
+    /**
      * Aggregate the partions back to a single partition using
      * the given closure.
      *

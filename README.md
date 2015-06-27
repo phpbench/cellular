@@ -109,14 +109,16 @@ Current functions:
 - `median`: Return the median value
 - `deviation`: Return the deviation as a percentage
 
-Partitioning and Forking
-------------------------
+Partitioning, Aggregation, and Materialization
+----------------------------------------------
 
 `Table` and `Row` instances provide the following methods:
 
 - `partition`: Internally divide the collection of elements according to a
   given callback.
 - `aggregate`: Aggregate the partitions of a table back to a single partition.
+- `materialize`: Materialize partitions of constituent Cellular instances into
+  Cellular instances.
 
 This is useful for creating summaries from multiple tables or rows:
 
@@ -142,6 +144,11 @@ the new instance, the primary partition of which will become the new primary
 partition for the collection upon which the operation is performed.
 
 The result will be anagous to the following SQL: `SELECT SUM(number) FROM table GROUP BY class`.
+
+Compacting
+----------
+
+TODO
 
 Sorting
 -------
