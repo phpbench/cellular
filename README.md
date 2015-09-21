@@ -1,6 +1,8 @@
 Cellular
 ========
 
+**ABANDONED**: Use Tabular instead.
+
 [![Build Status](https://travis-ci.org/dantleech/cellular.svg?branch=master)](https://travis-ci.org/dantleech/cellular) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/dantleech/cellular/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/dantleech/cellular/?branch=master)
 
 The cellular library provides an object oriented way of building, representing and analyzing tabular data.
