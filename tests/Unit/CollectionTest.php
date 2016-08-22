@@ -117,6 +117,36 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ),
             array_values($partitions[1]->getElements())
         );
+
+        return $this->collection;
+    }
+
+    /**
+     * It should marerialize partitions of its consituent cellulars
+     *
+     * @depends testPartition
+     */
+    public function testMaterialize($collection)
+    {
+        $collection = new Collection(array($collection));
+        $this->assertCount(1, $collection);
+        $collection->materialize();
+        $this->assertCount(2, $collection);
+
+        $this->assertEquals(
+            array(
+                array('a', 'b'),
+                array('a', 'a'),
+            ),
+            $collection[0]->getElements()
+        );
+        $this->assertEquals(
+            array(
+                array('b', 'a'),
+                array('b', 'a'),
+            ),
+            array_values($collection[1]->getElements())
+        );
     }
 
     /**
@@ -146,6 +176,20 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             array(2, 3, 4, 5),
+            $collection->getElements()
+        );
+    }
+
+    /**
+     * It should replace the elements in the collection
+     */
+    public function testReplace()
+    {
+        $collection = new Collection(array(1, 2), array(3, 4));
+        $collection->replace(array(100, 200, 300));
+
+        $this->assertEquals(
+            array(100, 200, 300),
             $collection->getElements()
         );
     }
@@ -316,5 +360,19 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertContainsOnlyInstancesOf('stdClass', $elements);
         $this->assertCount(2, $elements);
         $this->assertNotSame($elements[0], $object1);
+    }
+
+    /**
+     * It should compact its constituent elements into a single element
+     */
+    public function testCompact()
+    {
+        $this->collection[] = new Collection(array('a', 'b'));
+        $this->collection[] = new Collection(array('c', 'd'));
+        $this->collection->compact();
+        $this->assertCount(1, $this->collection);
+        $this->assertEquals(array(
+            'a', 'b', 'c', 'd',
+        ), $this->collection->first()->getElements());
     }
 }

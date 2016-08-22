@@ -1,6 +1,8 @@
 CHANGELOG
 =========
 
+- Added `materialize`, `replace`, and `compact` functions to `Collection`.
+
 0.3
 ---
 
